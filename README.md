@@ -1,9 +1,4 @@
 # End-to-End Industrial IoT Pipeline (IIoT 4.0)
-## Capteurs Simulés → Passerelle Edge Intelligente → Supervision SCADA Temps Réel
-**École Nationale Supérieure d'Arts et Métiers — ENSAM Rabat**  
-**Module : Industrie 4.0 — Année Académique 2026–2027**  
-**Encadrement : Professeure Maria ZEMZAMI**
-
 ---
 
 ## 1. Résumé Exécutif & Problématique Industrielle
