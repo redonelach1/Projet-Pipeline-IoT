@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-06T19:54:32.468Z",
+  "timestamp": "2026-11-06T20:27:43.055Z",
   "summary": {
     "total": 115,
     "passed": 115,
@@ -95,7 +95,7 @@
       "featureId": "F1",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 1,
+      "durationMs": 97,
       "error": null
     },
     {
@@ -104,7 +104,7 @@
       "featureId": "F1",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 1,
       "error": null
     },
     {
@@ -140,7 +140,7 @@
       "featureId": "F2",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 1,
       "error": null
     },
     {
@@ -185,7 +185,7 @@
       "featureId": "F3",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 1,
       "error": null
     },
     {
@@ -230,7 +230,7 @@
       "featureId": "F4",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 1,
+      "durationMs": 2,
       "error": null
     },
     {
@@ -275,7 +275,7 @@
       "featureId": "F5",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 1,
       "error": null
     },
     {
@@ -284,7 +284,7 @@
       "featureId": "F5",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 1,
+      "durationMs": 0,
       "error": null
     },
     {
@@ -293,7 +293,7 @@
       "featureId": "F5",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 1,
       "error": null
     },
     {
@@ -311,7 +311,7 @@
       "featureId": "F5",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 1,
+      "durationMs": 0,
       "error": null
     },
     {
@@ -320,7 +320,7 @@
       "featureId": "F6",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 13,
       "error": null
     },
     {
@@ -329,7 +329,7 @@
       "featureId": "F6",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 1,
       "error": null
     },
     {
@@ -338,7 +338,7 @@
       "featureId": "F6",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 1,
       "error": null
     },
     {
@@ -347,7 +347,7 @@
       "featureId": "F6",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 1,
+      "durationMs": 0,
       "error": null
     },
     {
@@ -365,7 +365,7 @@
       "featureId": "F7",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 12,
       "error": null
     },
     {
@@ -374,7 +374,7 @@
       "featureId": "F7",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 1,
+      "durationMs": 0,
       "error": null
     },
     {
@@ -392,7 +392,7 @@
       "featureId": "F7",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 19,
       "error": null
     },
     {
@@ -410,7 +410,7 @@
       "featureId": "F8",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 16,
       "error": null
     },
     {
@@ -446,7 +446,7 @@
       "featureId": "F8",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 1,
       "error": null
     },
     {
@@ -455,7 +455,7 @@
       "featureId": "F9",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 1,
+      "durationMs": 0,
       "error": null
     },
     {
@@ -473,7 +473,7 @@
       "featureId": "F9",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 1,
       "error": null
     },
     {
@@ -491,7 +491,7 @@
       "featureId": "F9",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 1,
+      "durationMs": 0,
       "error": null
     },
     {
@@ -500,7 +500,7 @@
       "featureId": "F10",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 1,
       "error": null
     },
     {
@@ -509,7 +509,7 @@
       "featureId": "F10",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 19,
       "error": null
     },
     {
@@ -518,7 +518,7 @@
       "featureId": "F10",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 1,
+      "durationMs": 0,
       "error": null
     },
     {
@@ -527,7 +527,7 @@
       "featureId": "F10",
       "tier": 1,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 1,
       "error": null
     },
     {
@@ -545,7 +545,7 @@
       "featureId": "F1",
       "tier": 2,
       "status": "PASS",
-      "durationMs": 1,
+      "durationMs": 2,
       "error": null
     },
     {
@@ -644,7 +644,7 @@
       "featureId": "F3",
       "tier": 2,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 1,
       "error": null
     },
     {
@@ -653,7 +653,7 @@
       "featureId": "F3",
       "tier": 2,
       "status": "PASS",
-      "durationMs": 1,
+      "durationMs": 0,
       "error": null
     },
     {
@@ -905,7 +905,7 @@
       "featureId": "F9",
       "tier": 2,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 1,
       "error": null
     },
     {
@@ -950,7 +950,7 @@
       "featureId": "F10",
       "tier": 2,
       "status": "PASS",
-      "durationMs": 1,
+      "durationMs": 0,
       "error": null
     },
     {
@@ -959,7 +959,7 @@
       "featureId": "F10",
       "tier": 2,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 1,
       "error": null
     },
     {
@@ -995,7 +995,7 @@
       "featureId": "F7+F8+F4",
       "tier": 3,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 1,
       "error": null
     },
     {
@@ -1031,7 +1031,7 @@
       "featureId": "F5+F9+F6+F3",
       "tier": 3,
       "status": "PASS",
-      "durationMs": 1,
+      "durationMs": 0,
       "error": null
     },
     {
@@ -1085,7 +1085,7 @@
       "featureId": "SCADA_NOMINAL",
       "tier": 4,
       "status": "PASS",
-      "durationMs": 0,
+      "durationMs": 1,
       "error": null
     },
     {

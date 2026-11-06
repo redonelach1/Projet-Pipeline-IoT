@@ -107,30 +107,30 @@ Ces valeurs sont des paramètres de test, pas des performances garanties. Elles 
 
 ```mermaid
 flowchart TD
-    subgraph Simulation & Field
-        A["Simulateur de capteurs<br/>(Python)"]
+    subgraph Sub_Simulation ["Simulation et Terrain"]
+        A["Simulateur de capteurs (Python)"]
     end
 
-    subgraph Messaging Layer
-        B["Broker MQTT<br/>(Mosquitto: TCP 1883 + WS 9001)"]
+    subgraph Sub_Messaging ["Couche Messagerie"]
+        B["Broker MQTT (Mosquitto: TCP 1883 + WS 9001)"]
     end
 
-    subgraph Edge Layer
-        C["Passerelle Edge<br/>(Python)"]
+    subgraph Sub_Edge ["Couche Edge"]
+        C["Passerelle Edge (Python)"]
         D["Validation et normalisation"]
         E["Filtrage / agrégation"]
         F["Détection d'événements"]
     end
 
-    subgraph Storage Layer
-        G["InfluxDB<br/>(Séries temporelles)"]
+    subgraph Sub_Storage ["Couche Stockage"]
+        G["InfluxDB (Séries temporelles)"]
     end
 
-    subgraph Supervision & Control [Dashboard Next.js + shadcn/ui]
+    subgraph Sub_Supervision ["Supervision et Contrôle (Next.js et shadcn/ui)"]
         direction TB
-        H1["Flux Live & Télémétrie<br/>(MQTT over WebSockets)"]
-        H2["Analyse Historique<br/>(InfluxDB Flux API)"]
-        H3["Contrôleur de Scénarios<br/>(Injection d'anomalies / Commandes)"]
+        H1["Flux Live et Télémétrie (MQTT over WebSockets)"]
+        H2["Analyse Historique (InfluxDB Flux API)"]
+        H3["Contrôleur de Scénarios (Injection d'anomalies / Commandes)"]
     end
 
     A -->|"MQTT Pub (1883)"| B
@@ -139,7 +139,7 @@ flowchart TD
     F -->|"Line Protocol"| G
     F -.->|"MQTT Pub (Events/Alerts)"| B
 
-    B ==>|"WebSocket Push (9001)"| H1
+    B -->|"WebSocket Push (9001)"| H1
     G -->|"API Query"| H2
     H3 -.->|"MQTT Pub (Commandes/Pannes)"| B
     B -.-> J["Clients de test MQTT"]
