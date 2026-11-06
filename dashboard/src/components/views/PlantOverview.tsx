@@ -1,9 +1,13 @@
 "use client";
 
-import React from "react";
-import { TelemetryPayload, DeviceStatus, AnomalyEvent, MachineState } from "@/types/iiot";
-import { Activity, ShieldCheck, AlertTriangle, AlertOctagon, Power, Clock, ArrowUpRight } from "lucide-react";
+import React, { useState } from "react";
+import { TelemetryPayload, DeviceStatus, AnomalyEvent, MachineState, ScenarioType } from "@/types/iiot";
+import { Activity, ShieldCheck, AlertTriangle, AlertOctagon, Power, Clock, ArrowUpRight, ShieldAlert, Cpu } from "lucide-react";
 import { cn, formatTimestamp } from "@/lib/utils";
+import { TelemetryAreaChart } from "@/components/scada/TelemetryAreaChart";
+import { RadialGauge } from "@/components/scada/RadialGauge";
+import { IncidentResponseTable } from "@/components/scada/IncidentResponseTable";
+import { TestLabPanel } from "@/components/scada/TestLabPanel";
 
 interface PlantOverviewProps {
   devices: Record<string, TelemetryPayload>;
@@ -13,6 +17,26 @@ interface PlantOverviewProps {
   totalMessages: number;
   avgLatency: number;
   onSelectDevice: (deviceId: string) => void;
+  onAcknowledge?: (eventId: string, note: string) => void;
+  onInjectFault?: (scenario: ScenarioType, targetDevice: string, durationSec: number) => void;
+  onReset?: () => void;
+  onPublishCommand?: (
+    deviceId: string | "all",
+    action: "set_scenario" | "reset",
+    scenario?: ScenarioType,
+    durationSec?: number
+  ) => void;
+  history?: Record<
+    string,
+    Array<{
+      time: string;
+      temp: number;
+      press: number;
+      vib: number;
+      hum?: number;
+    }>
+  >;
+  selectedDevice?: string;
 }
 
 export function PlantOverview({
@@ -23,11 +47,43 @@ export function PlantOverview({
   totalMessages,
   avgLatency,
   onSelectDevice,
+  onAcknowledge,
+  onInjectFault,
+  onReset,
+  onPublishCommand,
+  history,
+  selectedDevice,
 }: PlantOverviewProps) {
   // Preset list of expected machines in the fleet
   const fleetIds = ["motor-01", "motor-02", "pump-01", "compressor-01", "conveyor-01"];
   const activeCount = Object.keys(devices).length;
   const unackAlerts = alerts.filter((a) => !a.acknowledged);
+
+  const [activeLeadDevice, setActiveLeadDevice] = useState<string>(
+    selectedDevice || "motor-01"
+  );
+
+  const currentLeadDevice = selectedDevice || activeLeadDevice;
+  const leadHistory = history?.[currentLeadDevice] || [];
+
+  // Compute dynamic Fleet Health Index from alerts & physical telemetry
+  const criticalAlerts = unackAlerts.filter((a) => a.severity === "CRITICAL");
+  const warningAlerts = unackAlerts.filter((a) => a.severity === "WARNING");
+
+  let fleetHealth = 100.0;
+  // Factor in sensor anomalies
+  Object.values(devices).forEach((dev) => {
+    const t = dev.measurements?.temperature_c ?? 0;
+    const v = dev.measurements?.vibration_mm_s ?? 0;
+    if (t > 90 || v > 5.5) {
+      fleetHealth -= 15;
+    } else if (t > 80 || v > 4.0) {
+      fleetHealth -= 8;
+    }
+  });
+  fleetHealth -= criticalAlerts.length * 20;
+  fleetHealth -= warningAlerts.length * 8;
+  fleetHealth = Math.max(0, Math.min(100, fleetHealth));
 
   const getStatusBadge = (state?: MachineState) => {
     switch (state) {
@@ -66,87 +122,104 @@ export function PlantOverview({
 
   return (
     <div className="space-y-6">
-      {/* Top SCADA Metrics Banner */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-industrial-panel border border-industrial-border rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase text-gray-400">Connected Assets</span>
-            <Activity className="w-4 h-4 text-industrial-cyan" />
-          </div>
-          <div className="mt-2 flex items-baseline space-x-2">
-            <span className="text-2xl font-bold font-mono text-white">{activeCount} / 5</span>
-            <span className="text-xs text-emerald-400 font-mono">100% Target</span>
-          </div>
-          <div className="mt-2 w-full bg-industrial-dark rounded-full h-1.5 overflow-hidden">
-            <div
-              className="bg-industrial-cyan h-full rounded-full transition-all duration-500"
-              style={{ width: `${(activeCount / 5) * 100}%` }}
-            />
-          </div>
+      {/* Reference Design Main Grid: AreaChart (Left) + RadialGauge & Advisory (Right) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left Column (8 cols): Glowing Spline Area Chart */}
+        <div className="lg:col-span-8 flex flex-col justify-between">
+          <TelemetryAreaChart
+            history={leadHistory}
+            equipmentId={currentLeadDevice}
+            equipmentName={statuses[currentLeadDevice]?.device_type || "INDUSTRIAL DRIVE"}
+            title="Operational Telemetry Stream"
+            height={280}
+            className="h-full"
+          />
         </div>
 
-        <div className="bg-industrial-panel border border-industrial-border rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase text-gray-400">Stream Throughput</span>
-            <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-          </div>
-          <div className="mt-2 flex items-baseline space-x-2">
-            <span className="text-2xl font-bold font-mono text-white">{msgPerSec}</span>
-            <span className="text-xs text-gray-400 font-mono">msg/sec</span>
-          </div>
-          <p className="mt-2 text-[11px] text-gray-400 font-mono">
-            Total ingested: <span className="text-gray-200">{totalMessages.toLocaleString()}</span>
-          </p>
-        </div>
+        {/* Right Column (4 cols): Radial Gauge & Advisory Card */}
+        <div className="lg:col-span-4 flex flex-col space-y-6">
+          {/* Feature 6: Asset Health Circular Radial Gauge */}
+          <RadialGauge
+            percentage={fleetHealth}
+            title="Asset Health Index"
+            subtitle="Based on fleet telemetry & SLA"
+            size={180}
+            strokeWidth={14}
+            radius={58}
+          />
 
-        <div className="bg-industrial-panel border border-industrial-border rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase text-gray-400">Edge Processing Latency</span>
-            <span className="text-xs font-mono text-cyan-400">Sub-100ms</span>
-          </div>
-          <div className="mt-2 flex items-baseline space-x-2">
-            <span className="text-2xl font-bold font-mono text-white">{avgLatency}</span>
-            <span className="text-xs text-gray-400 font-mono">ms</span>
-          </div>
-          <p className="mt-2 text-[11px] text-gray-400 font-mono">
-            Target p95 requirement: &lt; 100 ms
-          </p>
-        </div>
+          {/* Industrial Advisory Card (Matching Reference Design Promo / Webinar Card) */}
+          <div className="bg-[#0D1411] border border-[#1A2821] rounded-2xl p-5 shadow-lg flex-1 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between pb-2">
+                <span className="text-[11px] font-mono uppercase tracking-wider text-[#00F59B] font-semibold">
+                  SCADA Surveillance
+                </span>
+                <span className="flex h-2 w-2 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00F59B] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00F59B]"></span>
+                </span>
+              </div>
+              <h4 className="text-base font-mono font-bold text-white mt-1">
+                ISO 10816 Vibration & Thermal Standards
+              </h4>
+              <p className="text-xs font-mono text-[#8E9E96] mt-2 leading-relaxed">
+                Real-time edge ingestion via MQTT QoS 1. Continuous algorithmic monitoring of bearing temperature and velocity RMS across all 5 production assets.
+              </p>
+            </div>
 
-        <div className="bg-industrial-panel border border-industrial-border rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase text-gray-400">Unacknowledged Alarms</span>
-            <ShieldCheck className={cn("w-4 h-4", unackAlerts.length > 0 ? "text-rose-400" : "text-emerald-400")} />
+            <div className="pt-4 mt-3 border-t border-[#1A2821]/80 flex items-center justify-between">
+              <span className="text-[11px] font-mono text-[#5C7268]">
+                SLA p95: &lt; 100ms
+              </span>
+              <button
+                type="button"
+                onClick={() => onSelectDevice(currentLeadDevice)}
+                className="text-xs font-mono font-semibold text-[#00F59B] hover:text-white transition-colors flex items-center space-x-1"
+              >
+                <span>Inspect Asset</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
-          <div className="mt-2 flex items-baseline space-x-2">
-            <span className={cn("text-2xl font-bold font-mono", unackAlerts.length > 0 ? "text-rose-400" : "text-emerald-400")}>
-              {unackAlerts.length}
-            </span>
-            <span className="text-xs text-gray-400 font-mono">pending review</span>
-          </div>
-          <p className="mt-2 text-[11px] text-gray-400 font-mono">
-            {unackAlerts.length === 0 ? "Normal operational state" : "Action required in Console"}
-          </p>
         </div>
       </div>
 
-      {/* Equipment Fleet Grid */}
-      <div>
-        <div className="flex items-center justify-between mb-4">
+      {/* Feature 7 & Feature 8: Incident Response Table (Left 8 cols) + Industrial Test Lab Panel (Right 4 cols) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="lg:col-span-8 flex flex-col">
+          <IncidentResponseTable
+            alerts={alerts}
+            onAcknowledge={onAcknowledge || (() => {})}
+            className="h-full"
+          />
+        </div>
+        <div className="lg:col-span-4 flex flex-col">
+          <TestLabPanel
+            onInjectFault={onInjectFault}
+            onReset={onReset}
+            onPublishCommand={onPublishCommand}
+            className="h-full"
+          />
+        </div>
+      </div>
+
+      {/* Industrial Plant Fleet Synoptic Grid */}
+      <div className="bg-[#0D1411] border border-[#1A2821] rounded-2xl p-6 shadow-lg">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#1A2821] gap-2 mb-5">
           <div>
-            <h2 className="text-sm font-bold uppercase tracking-wider text-white">
+            <h2 className="text-sm font-mono font-bold uppercase tracking-wider text-white">
               Industrial Plant Fleet Synoptic
             </h2>
-            <p className="text-xs text-gray-400">
-              Continuous multi-sensor telemetry stream via MQTT QoS 1
+            <p className="text-xs font-mono text-[#8E9E96] mt-0.5">
+              Continuous multi-sensor telemetry stream via MQTT QoS 1 (5/5 Assets)
             </p>
           </div>
-          <span className="text-xs font-mono text-gray-400 bg-industrial-panel border border-industrial-border px-2.5 py-1 rounded">
-            Protocol: OASIS MQTT 5.0 (JSON)
-          </span>
+          <div className="flex items-center space-x-2">
+            <span className="text-xs font-mono text-[#8E9E96] bg-[#070B09] border border-[#1A2821] px-2.5 py-1 rounded-full">
+              Protocol: OASIS MQTT 5.0 (JSON)
+            </span>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -160,11 +233,17 @@ export function PlantOverview({
             const press = telemetry?.measurements.pressure_bar ?? 0;
             const vib = telemetry?.measurements.vibration_mm_s ?? 0;
             const hum = telemetry?.measurements.humidity_pct ?? 0;
+            const isLead = devId === currentLeadDevice;
 
             return (
               <div
                 key={devId}
-                className="bg-industrial-panel border border-industrial-border rounded-lg p-5 hover:border-industrial-cyan/50 transition-all flex flex-col justify-between"
+                className={cn(
+                  "bg-[#070B09] border rounded-xl p-4 transition-all duration-200 flex flex-col justify-between",
+                  isLead
+                    ? "border-[#00F59B]/60 shadow-[0_0_15px_rgba(0,245,155,0.15)]"
+                    : "border-[#1A2821] hover:border-[#1F3328]"
+                )}
               >
                 <div>
                   {/* Card Header */}
@@ -172,11 +251,11 @@ export function PlantOverview({
                     <div>
                       <div className="flex items-center space-x-2">
                         <span className="font-mono font-bold text-base text-white">{devId}</span>
-                        <span className="text-[10px] font-mono text-gray-400 border border-industrial-border px-1.5 py-0.5 rounded uppercase">
+                        <span className="text-[10px] font-mono text-[#8E9E96] border border-[#1A2821] px-1.5 py-0.5 rounded uppercase">
                           {status?.device_type || (devId.startsWith("motor") ? "MOTOR" : devId.startsWith("pump") ? "PUMP" : devId.startsWith("compressor") ? "COMPRESSOR" : "CONVEYOR")}
                         </span>
                       </div>
-                      <p className="text-[11px] font-mono text-gray-400 mt-0.5">
+                      <p className="text-[11px] font-mono text-[#5C7268] mt-0.5">
                         Site A / Line {devId.includes("01") && !devId.includes("compressor") && !devId.includes("conveyor") ? "1" : "2"}
                       </p>
                     </div>
@@ -193,28 +272,28 @@ export function PlantOverview({
                   </div>
 
                   {/* Physical Variables Gauges */}
-                  <div className="grid grid-cols-2 gap-3 mt-4">
+                  <div className="grid grid-cols-2 gap-2.5 mt-4">
                     {/* Temperature */}
-                    <div className="bg-industrial-dark border border-industrial-border/60 rounded p-2.5">
-                      <div className="flex justify-between items-center text-[11px] font-mono text-gray-400">
-                        <span>Temperature</span>
-                        <span className="text-gray-500">Max 90°C</span>
+                    <div className="bg-[#0D1411] border border-[#1A2821] rounded-lg p-2.5">
+                      <div className="flex justify-between items-center text-[10px] font-mono text-[#8E9E96]">
+                        <span>Temp</span>
+                        <span className="text-[#5C7268]">Max 90°C</span>
                       </div>
                       <div className="mt-1 flex items-baseline justify-between">
                         <span
                           className={cn(
-                            "font-mono font-bold text-lg",
-                            temp > 85 ? "text-rose-400" : temp > 75 ? "text-amber-400" : "text-white"
+                            "font-mono font-bold text-base",
+                            temp > 85 ? "text-[#FF4D4D]" : temp > 75 ? "text-amber-400" : "text-white"
                           )}
                         >
-                          {temp.toFixed(1)} <span className="text-xs font-normal text-gray-400">°C</span>
+                          {temp.toFixed(1)} <span className="text-xs font-normal text-[#8E9E96]">°C</span>
                         </span>
                       </div>
-                      <div className="mt-1.5 w-full bg-gray-800 rounded-full h-1 overflow-hidden">
+                      <div className="mt-1.5 w-full bg-[#16231D] rounded-full h-1 overflow-hidden">
                         <div
                           className={cn(
                             "h-full rounded-full transition-all duration-300",
-                            temp > 85 ? "bg-rose-500" : temp > 75 ? "bg-amber-500" : "bg-emerald-500"
+                            temp > 85 ? "bg-[#FF4D4D]" : temp > 75 ? "bg-amber-400" : "bg-[#00F59B]"
                           )}
                           style={{ width: `${Math.min(100, (temp / 100) * 100)}%` }}
                         />
@@ -222,26 +301,26 @@ export function PlantOverview({
                     </div>
 
                     {/* Vibration */}
-                    <div className="bg-industrial-dark border border-industrial-border/60 rounded p-2.5">
-                      <div className="flex justify-between items-center text-[11px] font-mono text-gray-400">
-                        <span>Vibration RMS</span>
-                        <span className="text-gray-500">Max 6.0</span>
+                    <div className="bg-[#0D1411] border border-[#1A2821] rounded-lg p-2.5">
+                      <div className="flex justify-between items-center text-[10px] font-mono text-[#8E9E96]">
+                        <span>Vibration</span>
+                        <span className="text-[#5C7268]">Max 6.0</span>
                       </div>
                       <div className="mt-1 flex items-baseline justify-between">
                         <span
                           className={cn(
-                            "font-mono font-bold text-lg",
-                            vib > 5.0 ? "text-rose-400" : vib > 3.8 ? "text-amber-400" : "text-white"
+                            "font-mono font-bold text-base",
+                            vib > 5.0 ? "text-[#FF4D4D]" : vib > 3.8 ? "text-amber-400" : "text-white"
                           )}
                         >
-                          {vib.toFixed(2)} <span className="text-xs font-normal text-gray-400">mm/s</span>
+                          {vib.toFixed(2)} <span className="text-xs font-normal text-[#8E9E96]">mm/s</span>
                         </span>
                       </div>
-                      <div className="mt-1.5 w-full bg-gray-800 rounded-full h-1 overflow-hidden">
+                      <div className="mt-1.5 w-full bg-[#16231D] rounded-full h-1 overflow-hidden">
                         <div
                           className={cn(
                             "h-full rounded-full transition-all duration-300",
-                            vib > 5.0 ? "bg-rose-500" : vib > 3.8 ? "bg-amber-500" : "bg-emerald-500"
+                            vib > 5.0 ? "bg-[#FF4D4D]" : vib > 3.8 ? "bg-amber-400" : "bg-[#00F59B]"
                           )}
                           style={{ width: `${Math.min(100, (vib / 7.0) * 100)}%` }}
                         />
@@ -249,38 +328,38 @@ export function PlantOverview({
                     </div>
 
                     {/* Pressure */}
-                    <div className="bg-industrial-dark border border-industrial-border/60 rounded p-2.5">
-                      <div className="flex justify-between items-center text-[11px] font-mono text-gray-400">
+                    <div className="bg-[#0D1411] border border-[#1A2821] rounded-lg p-2.5">
+                      <div className="flex justify-between items-center text-[10px] font-mono text-[#8E9E96]">
                         <span>Pressure</span>
-                        <span className="text-gray-500">Bar</span>
+                        <span className="text-[#5C7268]">Hydraulic</span>
                       </div>
                       <div className="mt-1 flex items-baseline justify-between">
-                        <span className="font-mono font-bold text-lg text-white">
-                          {press.toFixed(2)} <span className="text-xs font-normal text-gray-400">bar</span>
+                        <span className="font-mono font-bold text-base text-white">
+                          {press.toFixed(2)} <span className="text-xs font-normal text-[#8E9E96]">bar</span>
                         </span>
                       </div>
-                      <div className="mt-1.5 w-full bg-gray-800 rounded-full h-1 overflow-hidden">
+                      <div className="mt-1.5 w-full bg-[#16231D] rounded-full h-1 overflow-hidden">
                         <div
-                          className="h-full bg-cyan-500 rounded-full transition-all duration-300"
+                          className="h-full bg-cyan-400 rounded-full transition-all duration-300"
                           style={{ width: `${Math.min(100, (press / 10.0) * 100)}%` }}
                         />
                       </div>
                     </div>
 
                     {/* Humidity */}
-                    <div className="bg-industrial-dark border border-industrial-border/60 rounded p-2.5">
-                      <div className="flex justify-between items-center text-[11px] font-mono text-gray-400">
+                    <div className="bg-[#0D1411] border border-[#1A2821] rounded-lg p-2.5">
+                      <div className="flex justify-between items-center text-[10px] font-mono text-[#8E9E96]">
                         <span>Humidity</span>
-                        <span className="text-gray-500">%RH</span>
+                        <span className="text-[#5C7268]">%RH</span>
                       </div>
                       <div className="mt-1 flex items-baseline justify-between">
-                        <span className="font-mono font-bold text-lg text-white">
-                          {hum.toFixed(1)} <span className="text-xs font-normal text-gray-400">%</span>
+                        <span className="font-mono font-bold text-base text-white">
+                          {hum.toFixed(1)} <span className="text-xs font-normal text-[#8E9E96]">%</span>
                         </span>
                       </div>
-                      <div className="mt-1.5 w-full bg-gray-800 rounded-full h-1 overflow-hidden">
+                      <div className="mt-1.5 w-full bg-[#16231D] rounded-full h-1 overflow-hidden">
                         <div
-                          className="h-full bg-blue-500 rounded-full transition-all duration-300"
+                          className="h-full bg-blue-400 rounded-full transition-all duration-300"
                           style={{ width: `${Math.min(100, hum)}%` }}
                         />
                       </div>
@@ -289,19 +368,34 @@ export function PlantOverview({
                 </div>
 
                 {/* Card Footer */}
-                <div className="mt-4 pt-3 border-t border-industrial-border/60 flex items-center justify-between text-xs font-mono">
-                  <div className="text-gray-400 text-[11px]">
-                    Seq: <span className="text-gray-200">{telemetry?.sequence ?? 0}</span> |{" "}
+                <div className="mt-4 pt-3 border-t border-[#1A2821] flex items-center justify-between text-xs font-mono">
+                  <div className="text-[#5C7268] text-[10px]">
+                    Seq: <span className="text-[#8E9E96]">{telemetry?.sequence ?? 0}</span> |{" "}
                     {formatTimestamp(telemetry?.timestamp)}
                   </div>
 
-                  <button
-                    onClick={() => onSelectDevice(devId)}
-                    className="flex items-center space-x-1 text-industrial-cyan hover:text-white transition-colors text-xs font-semibold"
-                  >
-                    <span>Inspect</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      type="button"
+                      onClick={() => setActiveLeadDevice(devId)}
+                      className={cn(
+                        "text-[10px] px-2 py-0.5 rounded transition-all font-semibold",
+                        isLead
+                          ? "bg-[#00F59B]/20 text-[#00F59B] border border-[#00F59B]/40"
+                          : "text-[#8E9E96] hover:text-white"
+                      )}
+                    >
+                      {isLead ? "Streamed" : "Stream"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onSelectDevice(devId)}
+                      className="flex items-center space-x-1 text-[#00F59B] hover:text-white transition-colors text-xs font-semibold"
+                    >
+                      <span>Inspect</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
             );
@@ -312,3 +406,4 @@ export function PlantOverview({
   );
 }
 
+export default PlantOverview;

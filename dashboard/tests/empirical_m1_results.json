@@ -1,0 +1,395 @@
+{
+  "timestamp": "2026-11-06T19:54:45.667Z",
+  "grandTotal": 36,
+  "grandPassed": 36,
+  "grandFailed": 0,
+  "suites": {
+    "kpiMetricBar": {
+      "passed": 18,
+      "failed": 0,
+      "failures": [],
+      "observations": [
+        {
+          "id": "CH-KPI-01",
+          "desc": "Enormous packet count (999,999,999) renders formatted SI suffix",
+          "observation": "999,999,999 formats as \"1000.0M\""
+        },
+        {
+          "id": "CH-KPI-02",
+          "desc": "Boundary packet count (10,000,000) formats exactly as 10.0M",
+          "observation": "10,000,000 formats as \"10.0M\""
+        },
+        {
+          "id": "CH-KPI-03",
+          "desc": "Sub-10M packet count (9,999,999) formats with locale commas",
+          "observation": "9,999,999 renders with full locale delimiters"
+        },
+        {
+          "id": "CH-KPI-04",
+          "desc": "Zero packet count renders \"0\" cleanly without NaN or empty",
+          "observation": "totalIngestion=0 renders as \"0\""
+        },
+        {
+          "id": "CH-KPI-05",
+          "desc": "Negative packet count renders without crash",
+          "observation": "totalIngestion=-500 renders \"-500\" (no auto-clamping to 0)"
+        },
+        {
+          "id": "CH-KPI-06",
+          "desc": "Active fleet \"5/5\" renders correctly with 100% Operational",
+          "observation": "activeFleet=\"5/5\" renders display and 100% Operational badge"
+        },
+        {
+          "id": "CH-KPI-07",
+          "desc": "Active fleet \"0/5\" renders text but note badge status behavior",
+          "observation": "activeFleet=\"0/5\" renders \"0/5\". Notice: Badge still displays \"Offline\" (static sub-badge)"
+        },
+        {
+          "id": "CH-KPI-08",
+          "desc": "Active fleet \"10/5\" renders without layout break",
+          "observation": "activeFleet=\"10/5\" renders successfully"
+        },
+        {
+          "id": "CH-KPI-09",
+          "desc": "Missing activeFleet prop defaults safely to \"5/5 Online\"",
+          "observation": "activeFleet undefined defaults to \"5/5 Online\""
+        },
+        {
+          "id": "CH-KPI-10",
+          "desc": "Active fleet as object prop { online: 3, total: 5 } formats cleanly",
+          "observation": "{ online: 3, total: 5 } formats as \"3/5 Online\""
+        },
+        {
+          "id": "CH-KPI-11",
+          "desc": "Nominal latency 8.4 ms renders with optimal green SLA badge",
+          "observation": "8.4 ms renders with < 100ms SLA and neon green token"
+        },
+        {
+          "id": "CH-KPI-12",
+          "desc": "Zero latency (0 ms) behavior check",
+          "observation": "p95LatencyMs=0 evaluates to safeLatency: 0 ms"
+        },
+        {
+          "id": "CH-KPI-13",
+          "desc": "Negative latency (-15 ms) fallback check",
+          "observation": "p95LatencyMs=-15 falls back safely to safeLatency: 8.4 ms"
+        },
+        {
+          "id": "CH-KPI-14",
+          "desc": "High latency (1450.8 ms) renders \"SLA Exceeded\" in red",
+          "observation": "1450.8 ms renders SLA Exceeded and #FF4D4D"
+        },
+        {
+          "id": "CH-KPI-15",
+          "desc": "Zero unacknowledged alarms renders neon checkmark and \"0 Pending (Nominal)\"",
+          "observation": "unacknowledgedAlarms=0 renders \"0 Pending (Nominal)\" with neon green"
+        },
+        {
+          "id": "CH-KPI-16",
+          "desc": "1 unacknowledged alarm renders red warning badge and \"1 Action Required\"",
+          "observation": "unacknowledgedAlarms=1 renders \"1 Action Required\" with alert red"
+        },
+        {
+          "id": "CH-KPI-17",
+          "desc": "999 unacknowledged alarms renders \"999 Action Required\"",
+          "observation": "unacknowledgedAlarms=999 renders without layout clipping"
+        },
+        {
+          "id": "CH-KPI-18",
+          "desc": "Empty props render with complete stability and zero crashes",
+          "observation": "KpiMetricBar({}) renders all 4 segments safely"
+        }
+      ],
+      "total": 18
+    },
+    "topBar": {
+      "passed": 8,
+      "failed": 0,
+      "failures": [],
+      "observations": [
+        {
+          "id": "CH-TOP-01",
+          "desc": "Default props render search input and default operator profile",
+          "observation": "TopBar renders default search bar, operator, and initials"
+        },
+        {
+          "id": "CH-TOP-02",
+          "desc": "isConnected=true displays \"WS:9001 LIVE\" with animated pulsing green dot",
+          "observation": "isConnected=true renders \"WS:9001 LIVE\""
+        },
+        {
+          "id": "CH-TOP-03",
+          "desc": "isConnected=false displays \"OFFLINE\" with static red dot",
+          "observation": "isConnected=false renders \"OFFLINE\""
+        },
+        {
+          "id": "CH-TOP-04",
+          "desc": "Long operator name (>28 chars) truncates with ellipsis",
+          "observation": "Long name \"Professeur Titulaire Dr. Mohamed Ben Ali\" truncated to \"Professeur Titulaire Dr. ...\""
+        },
+        {
+          "id": "CH-TOP-05",
+          "desc": "Operator with avatarUrl renders <img> element",
+          "observation": "Operator avatarUrl renders <img> tag"
+        },
+        {
+          "id": "CH-TOP-06",
+          "desc": "Null operator prop falls back safely to default operator",
+          "observation": "operator=null falls back safely to \"Operator RedNa\""
+        },
+        {
+          "id": "CH-TOP-07",
+          "desc": "Special characters in search query are properly escaped in DOM",
+          "observation": "Search input safely encodes HTML/XSS characters"
+        },
+        {
+          "id": "CH-TOP-08",
+          "desc": "Mobile toggle button rendered when onToggleSidebar is supplied",
+          "observation": "Mobile sidebar toggle button conditionally mounts when callback provided"
+        }
+      ],
+      "total": 8
+    },
+    "sidebar": {
+      "passed": 10,
+      "failed": 0,
+      "failures": [],
+      "observations": [
+        {
+          "id": "CH-SIDE-01",
+          "desc": "Renders all 3 mandated categorical navigation groups",
+          "observation": "All 3 categorical navigation groups rendered"
+        },
+        {
+          "id": "CH-SIDE-02",
+          "desc": "Active item applies solid neon green pill with dark text (#050B08)",
+          "observation": "Active tab gets solid neon green pill and dark text"
+        },
+        {
+          "id": "CH-SIDE-03",
+          "desc": "Swapping activeTab updates solid neon pill to new target",
+          "observation": "All 7 tabs verified with independent active state support"
+        },
+        {
+          "id": "CH-SIDE-04",
+          "desc": "Zero unacknowledged alerts (0) does not render alarm badge",
+          "observation": "unackAlertsCount=0 suppresses badge clutter"
+        },
+        {
+          "id": "CH-SIDE-05",
+          "desc": "Positive alerts (5) renders red alarm counter badge",
+          "observation": "unackAlertsCount=5 renders red badge with \"5\""
+        },
+        {
+          "id": "CH-SIDE-06",
+          "desc": "When activeTab is \"alerts\", badge background inverts for contrast",
+          "observation": "Active alerts tab inverts badge to dark bg + neon green text"
+        },
+        {
+          "id": "CH-SIDE-07",
+          "desc": "Extreme alarm count (1250) truncates cleanly to \"999+\"",
+          "observation": "unackAlertsCount=1250 renders \"999+\""
+        },
+        {
+          "id": "CH-SIDE-08",
+          "desc": "Negative alarm count (-5) suppresses badge rendering",
+          "observation": "unackAlertsCount=-5 suppresses badge safely"
+        },
+        {
+          "id": "CH-SIDE-09",
+          "desc": "isOpen=true mounts mobile slide-out panel and backdrop",
+          "observation": "Mobile drawer mounts and unmounts cleanly based on isOpen"
+        },
+        {
+          "id": "CH-SIDE-10",
+          "desc": "Bottom card renders ENSAM emblem, Version 2.4.0, and MQTT indicator",
+          "observation": "Bottom card renders ENSAM emblem, Version 2.4.0, and live status"
+        }
+      ],
+      "total": 10
+    }
+  },
+  "observations": [
+    {
+      "id": "CH-KPI-01",
+      "desc": "Enormous packet count (999,999,999) renders formatted SI suffix",
+      "observation": "999,999,999 formats as \"1000.0M\""
+    },
+    {
+      "id": "CH-KPI-02",
+      "desc": "Boundary packet count (10,000,000) formats exactly as 10.0M",
+      "observation": "10,000,000 formats as \"10.0M\""
+    },
+    {
+      "id": "CH-KPI-03",
+      "desc": "Sub-10M packet count (9,999,999) formats with locale commas",
+      "observation": "9,999,999 renders with full locale delimiters"
+    },
+    {
+      "id": "CH-KPI-04",
+      "desc": "Zero packet count renders \"0\" cleanly without NaN or empty",
+      "observation": "totalIngestion=0 renders as \"0\""
+    },
+    {
+      "id": "CH-KPI-05",
+      "desc": "Negative packet count renders without crash",
+      "observation": "totalIngestion=-500 renders \"-500\" (no auto-clamping to 0)"
+    },
+    {
+      "id": "CH-KPI-06",
+      "desc": "Active fleet \"5/5\" renders correctly with 100% Operational",
+      "observation": "activeFleet=\"5/5\" renders display and 100% Operational badge"
+    },
+    {
+      "id": "CH-KPI-07",
+      "desc": "Active fleet \"0/5\" renders text but note badge status behavior",
+      "observation": "activeFleet=\"0/5\" renders \"0/5\". Notice: Badge still displays \"Offline\" (static sub-badge)"
+    },
+    {
+      "id": "CH-KPI-08",
+      "desc": "Active fleet \"10/5\" renders without layout break",
+      "observation": "activeFleet=\"10/5\" renders successfully"
+    },
+    {
+      "id": "CH-KPI-09",
+      "desc": "Missing activeFleet prop defaults safely to \"5/5 Online\"",
+      "observation": "activeFleet undefined defaults to \"5/5 Online\""
+    },
+    {
+      "id": "CH-KPI-10",
+      "desc": "Active fleet as object prop { online: 3, total: 5 } formats cleanly",
+      "observation": "{ online: 3, total: 5 } formats as \"3/5 Online\""
+    },
+    {
+      "id": "CH-KPI-11",
+      "desc": "Nominal latency 8.4 ms renders with optimal green SLA badge",
+      "observation": "8.4 ms renders with < 100ms SLA and neon green token"
+    },
+    {
+      "id": "CH-KPI-12",
+      "desc": "Zero latency (0 ms) behavior check",
+      "observation": "p95LatencyMs=0 evaluates to safeLatency: 0 ms"
+    },
+    {
+      "id": "CH-KPI-13",
+      "desc": "Negative latency (-15 ms) fallback check",
+      "observation": "p95LatencyMs=-15 falls back safely to safeLatency: 8.4 ms"
+    },
+    {
+      "id": "CH-KPI-14",
+      "desc": "High latency (1450.8 ms) renders \"SLA Exceeded\" in red",
+      "observation": "1450.8 ms renders SLA Exceeded and #FF4D4D"
+    },
+    {
+      "id": "CH-KPI-15",
+      "desc": "Zero unacknowledged alarms renders neon checkmark and \"0 Pending (Nominal)\"",
+      "observation": "unacknowledgedAlarms=0 renders \"0 Pending (Nominal)\" with neon green"
+    },
+    {
+      "id": "CH-KPI-16",
+      "desc": "1 unacknowledged alarm renders red warning badge and \"1 Action Required\"",
+      "observation": "unacknowledgedAlarms=1 renders \"1 Action Required\" with alert red"
+    },
+    {
+      "id": "CH-KPI-17",
+      "desc": "999 unacknowledged alarms renders \"999 Action Required\"",
+      "observation": "unacknowledgedAlarms=999 renders without layout clipping"
+    },
+    {
+      "id": "CH-KPI-18",
+      "desc": "Empty props render with complete stability and zero crashes",
+      "observation": "KpiMetricBar({}) renders all 4 segments safely"
+    },
+    {
+      "id": "CH-TOP-01",
+      "desc": "Default props render search input and default operator profile",
+      "observation": "TopBar renders default search bar, operator, and initials"
+    },
+    {
+      "id": "CH-TOP-02",
+      "desc": "isConnected=true displays \"WS:9001 LIVE\" with animated pulsing green dot",
+      "observation": "isConnected=true renders \"WS:9001 LIVE\""
+    },
+    {
+      "id": "CH-TOP-03",
+      "desc": "isConnected=false displays \"OFFLINE\" with static red dot",
+      "observation": "isConnected=false renders \"OFFLINE\""
+    },
+    {
+      "id": "CH-TOP-04",
+      "desc": "Long operator name (>28 chars) truncates with ellipsis",
+      "observation": "Long name \"Professeur Titulaire Dr. Mohamed Ben Ali\" truncated to \"Professeur Titulaire Dr. ...\""
+    },
+    {
+      "id": "CH-TOP-05",
+      "desc": "Operator with avatarUrl renders <img> element",
+      "observation": "Operator avatarUrl renders <img> tag"
+    },
+    {
+      "id": "CH-TOP-06",
+      "desc": "Null operator prop falls back safely to default operator",
+      "observation": "operator=null falls back safely to \"Operator RedNa\""
+    },
+    {
+      "id": "CH-TOP-07",
+      "desc": "Special characters in search query are properly escaped in DOM",
+      "observation": "Search input safely encodes HTML/XSS characters"
+    },
+    {
+      "id": "CH-TOP-08",
+      "desc": "Mobile toggle button rendered when onToggleSidebar is supplied",
+      "observation": "Mobile sidebar toggle button conditionally mounts when callback provided"
+    },
+    {
+      "id": "CH-SIDE-01",
+      "desc": "Renders all 3 mandated categorical navigation groups",
+      "observation": "All 3 categorical navigation groups rendered"
+    },
+    {
+      "id": "CH-SIDE-02",
+      "desc": "Active item applies solid neon green pill with dark text (#050B08)",
+      "observation": "Active tab gets solid neon green pill and dark text"
+    },
+    {
+      "id": "CH-SIDE-03",
+      "desc": "Swapping activeTab updates solid neon pill to new target",
+      "observation": "All 7 tabs verified with independent active state support"
+    },
+    {
+      "id": "CH-SIDE-04",
+      "desc": "Zero unacknowledged alerts (0) does not render alarm badge",
+      "observation": "unackAlertsCount=0 suppresses badge clutter"
+    },
+    {
+      "id": "CH-SIDE-05",
+      "desc": "Positive alerts (5) renders red alarm counter badge",
+      "observation": "unackAlertsCount=5 renders red badge with \"5\""
+    },
+    {
+      "id": "CH-SIDE-06",
+      "desc": "When activeTab is \"alerts\", badge background inverts for contrast",
+      "observation": "Active alerts tab inverts badge to dark bg + neon green text"
+    },
+    {
+      "id": "CH-SIDE-07",
+      "desc": "Extreme alarm count (1250) truncates cleanly to \"999+\"",
+      "observation": "unackAlertsCount=1250 renders \"999+\""
+    },
+    {
+      "id": "CH-SIDE-08",
+      "desc": "Negative alarm count (-5) suppresses badge rendering",
+      "observation": "unackAlertsCount=-5 suppresses badge safely"
+    },
+    {
+      "id": "CH-SIDE-09",
+      "desc": "isOpen=true mounts mobile slide-out panel and backdrop",
+      "observation": "Mobile drawer mounts and unmounts cleanly based on isOpen"
+    },
+    {
+      "id": "CH-SIDE-10",
+      "desc": "Bottom card renders ENSAM emblem, Version 2.4.0, and MQTT indicator",
+      "observation": "Bottom card renders ENSAM emblem, Version 2.4.0, and live status"
+    }
+  ],
+  "failures": []
+}

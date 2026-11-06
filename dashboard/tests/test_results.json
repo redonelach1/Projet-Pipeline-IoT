@@ -1,0 +1,1128 @@
+{
+  "timestamp": "2026-11-06T19:54:32.468Z",
+  "summary": {
+    "total": 115,
+    "passed": 115,
+    "failed": 0,
+    "passRate": "100.0%"
+  },
+  "featureCoverage": {
+    "F1": {
+      "name": "Theme & Color Token Architecture",
+      "tier1": 5,
+      "tier2": 5,
+      "tier3": 0,
+      "tier4": 0,
+      "total": 10
+    },
+    "F2": {
+      "name": "Left Sidebar Navigation",
+      "tier1": 5,
+      "tier2": 5,
+      "tier3": 0,
+      "tier4": 0,
+      "total": 10
+    },
+    "F3": {
+      "name": "Top Header Bar",
+      "tier1": 5,
+      "tier2": 5,
+      "tier3": 0,
+      "tier4": 0,
+      "total": 10
+    },
+    "F4": {
+      "name": "Horizontal KPI Metric Bar",
+      "tier1": 5,
+      "tier2": 5,
+      "tier3": 0,
+      "tier4": 0,
+      "total": 10
+    },
+    "F5": {
+      "name": "Recharts Spline Area Chart",
+      "tier1": 5,
+      "tier2": 5,
+      "tier3": 0,
+      "tier4": 0,
+      "total": 10
+    },
+    "F6": {
+      "name": "Asset Health Radial Gauge",
+      "tier1": 5,
+      "tier2": 5,
+      "tier3": 0,
+      "tier4": 0,
+      "total": 10
+    },
+    "F7": {
+      "name": "Test Lab Fault Injector",
+      "tier1": 5,
+      "tier2": 5,
+      "tier3": 0,
+      "tier4": 0,
+      "total": 10
+    },
+    "F8": {
+      "name": "Incident Response Table & ACK",
+      "tier1": 5,
+      "tier2": 5,
+      "tier3": 0,
+      "tier4": 0,
+      "total": 10
+    },
+    "F9": {
+      "name": "Strict Live MQTT Stream",
+      "tier1": 5,
+      "tier2": 5,
+      "tier3": 0,
+      "tier4": 0,
+      "total": 10
+    },
+    "F10": {
+      "name": "Production Build & Acceptance",
+      "tier1": 5,
+      "tier2": 5,
+      "tier3": 0,
+      "tier4": 0,
+      "total": 10
+    }
+  },
+  "results": [
+    {
+      "id": "T1.1.1",
+      "name": "SCADA matte charcoal background surface token defined",
+      "featureId": "F1",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.1.2",
+      "name": "SCADA subtle dark border token defined",
+      "featureId": "F1",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.1.3",
+      "name": "SCADA neon mint green accent token defined (#00F59B / #10B981)",
+      "featureId": "F1",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.1.4",
+      "name": "SCADA high-visibility alarm alert red token defined",
+      "featureId": "F1",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.1.5",
+      "name": "Tailwind or CSS defines glowing neon shadow / glow utilities",
+      "featureId": "F1",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.2.1",
+      "name": "Sidebar navigation component structure exists",
+      "featureId": "F2",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.2.2",
+      "name": "Sidebar provides categorized navigation groups or tabs",
+      "featureId": "F2",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.2.3",
+      "name": "Active navigation item applies solid neon green pill styling",
+      "featureId": "F2",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.2.4",
+      "name": "Sidebar renders icon badges for alerts or fleet counts",
+      "featureId": "F2",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.2.5",
+      "name": "Sidebar supports onTabChange / setActiveTab callback",
+      "featureId": "F2",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.3.1",
+      "name": "TopBar component renders search input with placeholder",
+      "featureId": "F3",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.3.2",
+      "name": "TopBar renders operator profile container",
+      "featureId": "F3",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.3.3",
+      "name": "TopBar renders broker connectivity indicator",
+      "featureId": "F3",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.3.4",
+      "name": "TopBar displays active WebSocket broker URL or host badge",
+      "featureId": "F3",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.3.5",
+      "name": "TopBar includes search icon from lucide-react",
+      "featureId": "F3",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.4.1",
+      "name": "Unified horizontal KPI card layout exists",
+      "featureId": "F4",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.4.2",
+      "name": "Vertical hairline dividers separate KPI metric segments",
+      "featureId": "F4",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.4.3",
+      "name": "KPI Bar displays Total Ingestion metric and rate indicator",
+      "featureId": "F4",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.4.4",
+      "name": "KPI Bar displays Active Fleet metric (e.g. 5/5 Active)",
+      "featureId": "F4",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.4.5",
+      "name": "KPI Bar displays Edge p95 Latency and Unacknowledged Alarms",
+      "featureId": "F4",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.5.1",
+      "name": "Recharts AreaChart and Area components imported and used",
+      "featureId": "F5",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.5.2",
+      "name": "Spline interpolation uses monotone curve mode",
+      "featureId": "F5",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.5.3",
+      "name": "SVG defs block defines linearGradient with neon mint green stop colors",
+      "featureId": "F5",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.5.4",
+      "name": "Multi-metric telemetry toggle supports temp, press, and vib keys",
+      "featureId": "F5",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.5.5",
+      "name": "Live rolling telemetry feed accepts history points array",
+      "featureId": "F5",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.6.1",
+      "name": "Component renders circular SVG container with circle elements",
+      "featureId": "F6",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.6.2",
+      "name": "Computes strokeDasharray and strokeDashoffset dynamically",
+      "featureId": "F6",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.6.3",
+      "name": "Applies rounded stroke caps and thick stroke width",
+      "featureId": "F6",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.6.4",
+      "name": "Applies glowing neon mint stroke styling (#00F59B / #10B981)",
+      "featureId": "F6",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.6.5",
+      "name": "Displays central percentage text and fleet reliability label",
+      "featureId": "F6",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.7.1",
+      "name": "Offers 6 distinct anomaly scenarios plus reset",
+      "featureId": "F7",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.7.2",
+      "name": "Equipment target selector supports individual devices and all",
+      "featureId": "F7",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.7.3",
+      "name": "Duration control allows configuring fault duration in seconds",
+      "featureId": "F7",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.7.4",
+      "name": "Dispatches structured MQTT simulation command payload",
+      "featureId": "F7",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.7.5",
+      "name": "Provides RESET action to restore normal device operations",
+      "featureId": "F7",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.8.1",
+      "name": "Incident table displays severity pills (CRITICAL, WARNING, INFO)",
+      "featureId": "F8",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.8.2",
+      "name": "Renders incident metadata: timestamp, equipment ID, rule, and value",
+      "featureId": "F8",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.8.3",
+      "name": "Operator ACK action triggers modal note dialog",
+      "featureId": "F8",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.8.4",
+      "name": "Acknowledging incident calls onAcknowledge with eventId and note",
+      "featureId": "F8",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.8.5",
+      "name": "Dispatches MQTT ACK packet to event/ack topic",
+      "featureId": "F8",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.9.1",
+      "name": "Connects strictly to ws://localhost:9001 via WebSocket protocol",
+      "featureId": "F9",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.9.2",
+      "name": "Subscribes to live topics (telemetry, status, event)",
+      "featureId": "F9",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.9.3",
+      "name": "Zero client-side mock fallback data audit (strict R4)",
+      "featureId": "F9",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.9.4",
+      "name": "Initial state is clean and empty (no pre-populated fake equipment)",
+      "featureId": "F9",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.9.5",
+      "name": "Empirical latency calculation algorithm from rolling telemetry",
+      "featureId": "F9",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.10.1",
+      "name": "Package.json defines standard build, dev, start, and lint scripts",
+      "featureId": "F10",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.10.2",
+      "name": "TypeScript configuration enforces strict mode",
+      "featureId": "F10",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.10.3",
+      "name": "Next.js configuration specifies standalone output",
+      "featureId": "F10",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T1.10.4",
+      "name": "All production core dependencies verified in package.json",
+      "featureId": "F10",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T1.10.5",
+      "name": "Root layout configures dark theme container classes",
+      "featureId": "F10",
+      "tier": 1,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.1.1",
+      "name": "Contrast ratio of dark text #050B08 on neon green #00F59B exceeds WCAG AA (4.5:1)",
+      "featureId": "F1",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T2.1.2",
+      "name": "Contrast ratio of alarm red #FF4D4D on dark background #0D1411 exceeds 4.0:1",
+      "featureId": "F1",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.1.3",
+      "name": "Neon pill shadow handles high blur radius without negative spread syntax error",
+      "featureId": "F1",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.1.4",
+      "name": "Theme CSS custom variables support standard HSL / RGB channel separation",
+      "featureId": "F1",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.1.5",
+      "name": "Dark surface tokens maintain depth layering (#070B09 darker than #0D1411)",
+      "featureId": "F1",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.2.1",
+      "name": "Zero unacknowledged alarms badge formatting does not render zero clutter",
+      "featureId": "F2",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.2.2",
+      "name": "Extreme alarm count (>999) truncates cleanly to 999+",
+      "featureId": "F2",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.2.3",
+      "name": "Unknown or invalid activeTab defaults gracefully to overview",
+      "featureId": "F2",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.2.4",
+      "name": "Rapid tab switching preserves last chosen tab without race conditions",
+      "featureId": "F2",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.2.5",
+      "name": "Sidebar item handles empty label without crashing",
+      "featureId": "F2",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.3.1",
+      "name": "Empty search query does not filter out devices or crash",
+      "featureId": "F3",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.3.2",
+      "name": "Search query containing regex metacharacters (*, ?, +) does not throw syntax error",
+      "featureId": "F3",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.3.3",
+      "name": "Disconnected broker state formats red/amber indicator with Offline text",
+      "featureId": "F3",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T2.3.4",
+      "name": "Long operator name (>40 characters) truncates with ellipsis safely",
+      "featureId": "F3",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.3.5",
+      "name": "Missing operator profile object defaults to Chief SCADA Operator",
+      "featureId": "F3",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.4.1",
+      "name": "Zero ingestion rate formats as 0.0 msg/s without NaN",
+      "featureId": "F4",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.4.2",
+      "name": "Zero or negative edge latency renders 0 ms or N/A without negative display",
+      "featureId": "F4",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.4.3",
+      "name": "Zero active fleet devices (0/5) formats safely without division by zero",
+      "featureId": "F4",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.4.4",
+      "name": "Extremely high ingestion count (12,500,000) formats with SI suffix 12.5M",
+      "featureId": "F4",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.4.5",
+      "name": "Missing KPI props safely default to zeroed neutral states",
+      "featureId": "F4",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.5.1",
+      "name": "Empty history array does not throw and yields length 0",
+      "featureId": "F5",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.5.2",
+      "name": "Single data point history parses time and value without spline failure",
+      "featureId": "F5",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.5.3",
+      "name": "Extreme temperature spike (1250°C) parses as valid number",
+      "featureId": "F5",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.5.4",
+      "name": "Sub-zero temperatures (e.g. -15°C in cold storage) handled cleanly",
+      "featureId": "F5",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.5.5",
+      "name": "Stream burst of 100 frames caps rolling history at maximum capacity (30)",
+      "featureId": "F5",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.6.1",
+      "name": "0% health sets strokeDashoffset equal to full circumference",
+      "featureId": "F6",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.6.2",
+      "name": "100% health sets strokeDashoffset to 0 (closed circle)",
+      "featureId": "F6",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.6.3",
+      "name": "Overflow percentage (175%) clamps cleanly to 100%",
+      "featureId": "F6",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.6.4",
+      "name": "Negative percentage (-35%) clamps cleanly to 0%",
+      "featureId": "F6",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.6.5",
+      "name": "NaN, null, or undefined percentage defaults to 0% offset",
+      "featureId": "F6",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.7.1",
+      "name": "Zero duration fault clamps to minimum allowable safety duration (1s)",
+      "featureId": "F7",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.7.2",
+      "name": "Duration exceeding 300s ceiling clamps to 300s",
+      "featureId": "F7",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.7.3",
+      "name": "Unknown equipment ID defaults to all broadcast safely",
+      "featureId": "F7",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.7.4",
+      "name": "Rapid command dispatches produce valid independent JSON payloads",
+      "featureId": "F7",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "id": "T2.7.5",
+      "name": "RESET command payload defines action reset and duration 0",
+      "featureId": "F7",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.8.1",
+      "name": "Empty operator ACK note submits with default automated acknowledgment note",
+      "featureId": "F8",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.8.2",
+      "name": "Long operator note (1500 chars) truncates or sanitizes safely",
+      "featureId": "F8",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.8.3",
+      "name": "Acknowledging already acknowledged alert is an idempotent no-op",
+      "featureId": "F8",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.8.4",
+      "name": "Multiple alerts sharing identical timestamp preserve unique IDs",
+      "featureId": "F8",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.8.5",
+      "name": "Empty alerts list renders clean zero-state message",
+      "featureId": "F8",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.9.1",
+      "name": "Broker unreachable sets isConnected false without unhandled exception",
+      "featureId": "F9",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.9.2",
+      "name": "Corrupted non-JSON MQTT payload is safely caught and discarded",
+      "featureId": "F9",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.9.3",
+      "name": "Telemetry packet with missing sensor fields uses null-coalescing defaults",
+      "featureId": "F9",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.9.4",
+      "name": "Empirical p95 calculation correctly handles high-latency outliers",
+      "featureId": "F9",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.9.5",
+      "name": "Empirical p95 calculation with empty samples returns 0 ms",
+      "featureId": "F9",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.10.1",
+      "name": "Missing optional environment variables fall back to default localhost URL",
+      "featureId": "F10",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T2.10.2",
+      "name": "Package name follows lowercase standard naming conventions",
+      "featureId": "F10",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.10.3",
+      "name": "Zero mock telemetry scripts found in dashboard root",
+      "featureId": "F10",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.10.4",
+      "name": "PostCSS and Tailwind configs exist and are valid modules",
+      "featureId": "F10",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T2.10.5",
+      "name": "TypeScript compiler target is at least ES2017 for modern async/await",
+      "featureId": "F10",
+      "tier": 2,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T3.1",
+      "name": "Fault Injection (F7) triggers Alert Emission (F8) and increments KPI Unack Alarms (F4)",
+      "featureId": "F7+F8+F4",
+      "tier": 3,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T3.2",
+      "name": "Operator ACK in Modal (F8) decrements KPI Unack Alarms (F4) and Sidebar Badge (F2)",
+      "featureId": "F8+F4+F2",
+      "tier": 3,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T3.3",
+      "name": "Sidebar Tab Selection (F2) updates Active Solid Neon Pill (F1) and swaps View Container",
+      "featureId": "F2+F1+F10",
+      "tier": 3,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T3.4",
+      "name": "Live MQTT Ingestion (F9) increments KPI Total Ingestion (F4) and feeds AreaChart (F5)",
+      "featureId": "F9+F4+F5",
+      "tier": 3,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T3.5",
+      "name": "Telemetry Anomaly Spike (F5, F9) degrades SVG Radial Gauge Health (F6) and updates Status (F3)",
+      "featureId": "F5+F9+F6+F3",
+      "tier": 3,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T3.6",
+      "name": "Search Bar Filtering (F3) highlights device, selecting updates AreaChart device target (F5)",
+      "featureId": "F3+F2+F5",
+      "tier": 3,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T3.7",
+      "name": "Broker Disconnect (F9) updates TopBar Indicator to Offline (F3) and freezes KPI Latency (F4)",
+      "featureId": "F9+F3+F4",
+      "tier": 3,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T3.8",
+      "name": "Reset Fault Command (F7) normalizes Telemetry (F5, F9) and restores Radial Gauge to 100% (F6)",
+      "featureId": "F7+F5+F6",
+      "tier": 3,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T3.9",
+      "name": "Shell components (Sidebar F2, TopBar F3, KPI Bar F4) unify on matte charcoal and border tokens (F1)",
+      "featureId": "F1+F2+F3+F4",
+      "tier": 3,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T3.10",
+      "name": "Empirical p95 calculation (F9) dynamically styles KPI metric color (F4, F1)",
+      "featureId": "F9+F4+F1",
+      "tier": 3,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T4.1",
+      "name": "Scenario 1: Nominal Plant Shift Operation (5/5 Fleet, Steady MQTT Stream, 0 Alarms, p95 < 20ms)",
+      "featureId": "SCADA_NOMINAL",
+      "tier": 4,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T4.2",
+      "name": "Scenario 2: Critical Motor Thermal Overrun & Emergency Operator ACK Workflow",
+      "featureId": "SCADA_OVERHEAT_ACK",
+      "tier": 4,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T4.3",
+      "name": "Scenario 3: High-Throughput Ingestion & Fleet Stress Event (1000 msg/sec Burst Handling)",
+      "featureId": "SCADA_STRESS",
+      "tier": 4,
+      "status": "PASS",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "id": "T4.4",
+      "name": "Scenario 4: Intermittent Network Loss & Automatic SCADA Resynchronization",
+      "featureId": "SCADA_NET_LOSS",
+      "tier": 4,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "id": "T4.5",
+      "name": "Scenario 5: Multi-Equipment Cascade Fault & Lab Simulation Reset",
+      "featureId": "SCADA_CASCADE_RESET",
+      "tier": 4,
+      "status": "PASS",
+      "durationMs": 0,
+      "error": null
+    }
+  ]
+}

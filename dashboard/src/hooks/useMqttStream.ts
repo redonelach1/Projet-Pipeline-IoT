@@ -4,10 +4,12 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import mqtt, { MqttClient } from "mqtt";
 import { TelemetryPayload, AnomalyEvent, ScenarioType, DeviceStatus } from "@/types/iiot";
 
-interface StreamStats {
+export interface StreamStats {
   totalMessages: number;
   messagesPerSecond: number;
   averageLatencyMs: number;
+  avgLatencyMs: number;
+  p95LatencyMs: number;
   connectedAt: string | null;
 }
 
@@ -32,6 +34,8 @@ export function useMqttStream() {
     totalMessages: 0,
     messagesPerSecond: 0,
     averageLatencyMs: 0,
+    avgLatencyMs: 0,
+    p95LatencyMs: 0,
     connectedAt: null,
   });
 
@@ -39,6 +43,7 @@ export function useMqttStream() {
   const msgCountWindowRef = useRef<number>(0);
   const latencySumRef = useRef<number>(0);
   const latencyCountRef = useRef<number>(0);
+  const latencyRingBuffer = useRef<number[]>([]);
 
   useEffect(() => {
     const wsUrl = process.env.NEXT_PUBLIC_MQTT_WS_URL || "ws://localhost:9001";
@@ -67,12 +72,25 @@ export function useMqttStream() {
       client.subscribe("ensam/iiot/+/+/+/event", { qos: 1 });
     });
 
+    client.on("reconnect", () => {
+      console.log("[IIoT SCADA] Reconnecting to Mosquitto broker...");
+    });
+
+    client.on("close", () => {
+      setIsConnected(false);
+    });
+
+    client.on("offline", () => {
+      setIsConnected(false);
+    });
+
     client.on("disconnect", () => {
       setIsConnected(false);
     });
 
     client.on("error", (err) => {
       console.warn("[IIoT SCADA] MQTT Client error:", err);
+      setIsConnected(false);
     });
 
     client.on("message", (topic: string, message: Buffer) => {
@@ -83,14 +101,17 @@ export function useMqttStream() {
         msgCountWindowRef.current += 1;
 
         if (topic.endsWith("/telemetry")) {
-          const telemetry = data as TelemetryPayload;
+          const payload = data as TelemetryPayload;
+          const telemetry = payload;
           const devId = telemetry.device_id;
+          if (!devId) return;
 
-          // Latency computation
+          // Latency computation with 100-sample empirical ring buffer
           let latency = 0;
           try {
-            const sendTime = new Date(telemetry.timestamp).getTime();
-            latency = Math.max(0, Date.now() - sendTime);
+            if (payload.timestamp) {
+              latency = Math.max(0, Date.now() - new Date(payload.timestamp).getTime());
+            }
           } catch {
             latency = 0;
           }
@@ -98,53 +119,71 @@ export function useMqttStream() {
           latencySumRef.current += latency;
           latencyCountRef.current += 1;
 
+          // Empirical 100-sample rolling latency ring buffer
+          latencyRingBuffer.current.push(latency);
+          if (latencyRingBuffer.current.length > 100) {
+            latencyRingBuffer.current.shift();
+          }
+
           setDevices((prev) => ({
             ...prev,
             [devId]: telemetry,
           }));
 
           // Append to rolling chart history (max 30 points per device)
-          const timeLabel = new Date(telemetry.timestamp).toLocaleTimeString("en-GB", {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          });
+          const timeLabel = telemetry.timestamp
+            ? new Date(telemetry.timestamp).toLocaleTimeString("en-GB", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              })
+            : new Date().toLocaleTimeString("en-GB");
 
           setHistory((prev) => {
             const currentList = prev[devId] || [];
+            const measurements = telemetry.measurements || {
+              temperature_c: 0,
+              pressure_bar: 0,
+              vibration_mm_s: 0,
+              humidity_pct: 0,
+            };
             const nextList = [
               ...currentList,
               {
                 time: timeLabel,
-                temp: telemetry.measurements.temperature_c,
-                press: telemetry.measurements.pressure_bar,
-                vib: telemetry.measurements.vibration_mm_s,
-                hum: telemetry.measurements.humidity_pct,
+                temp: measurements.temperature_c ?? 0,
+                press: measurements.pressure_bar ?? 0,
+                vib: measurements.vibration_mm_s ?? 0,
+                hum: measurements.humidity_pct ?? 0,
               },
             ].slice(-30);
             return { ...prev, [devId]: nextList };
           });
         } else if (topic.endsWith("/status")) {
           const status = data as DeviceStatus;
-          status.last_seen = new Date().toISOString();
-          setStatuses((prev) => ({
-            ...prev,
-            [status.device_id]: status,
-          }));
+          if (status.device_id) {
+            status.last_seen = new Date().toISOString();
+            setStatuses((prev) => ({
+              ...prev,
+              [status.device_id]: status,
+            }));
+          }
         } else if (topic.endsWith("/event")) {
           const event = data as AnomalyEvent;
-          setAlerts((prev) => {
-            // Avoid duplicate events
-            if (prev.some((a) => a.event_id === event.event_id)) return prev;
-            return [event, ...prev].slice(0, 100);
-          });
+          if (event.event_id) {
+            setAlerts((prev) => {
+              // Avoid duplicate events
+              if (prev.some((a) => a.event_id === event.event_id)) return prev;
+              return [event, ...prev].slice(0, 100);
+            });
+          }
         }
       } catch (err) {
         console.error("[IIoT SCADA] Message handling error:", err);
       }
     });
 
-    // 1-second interval to compute throughput rate and average latency
+    // 1-second interval to compute throughput rate, average latency, and p95 latency
     const intervalId = setInterval(() => {
       const throughput = msgCountWindowRef.current;
       msgCountWindowRef.current = 0;
@@ -157,11 +196,20 @@ export function useMqttStream() {
       latencySumRef.current = 0;
       latencyCountRef.current = 0;
 
+      // Compute empirical 95th percentile latency from ring buffer
+      const sorted = [...latencyRingBuffer.current].sort((a, b) => a - b);
+      const p95 =
+        sorted.length > 0
+          ? sorted[Math.floor(sorted.length * 0.95)]
+          : (avgLat || 0);
+
       setStats((prev) => ({
         ...prev,
         totalMessages: prev.totalMessages + throughput,
         messagesPerSecond: throughput,
         averageLatencyMs: avgLat,
+        avgLatencyMs: avgLat,
+        p95LatencyMs: p95,
       }));
     }, 1000);
 

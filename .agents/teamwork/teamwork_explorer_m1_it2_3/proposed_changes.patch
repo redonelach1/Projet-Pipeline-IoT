@@ -1,0 +1,191 @@
+--- a/dashboard/src/components/scada/KpiMetricBar.tsx
++++ b/dashboard/src/components/scada/KpiMetricBar.tsx
+@@ -24,24 +24,96 @@ export interface KpiMetricBarProps {
+   className?: string;
+ }
+ 
++export interface FleetMetrics {
++  display: string;
++  online: number;
++  total: number;
++  percentage: number;
++  status: "optimal" | "degraded" | "offline";
++  label: string;
++}
++
++export function parseActiveFleet(
++  activeFleet?: string | { online: number; total: number }
++): FleetMetrics {
++  let online = 5;
++  let total = 5;
++  let display = "5/5 Online";
++
++  if (typeof activeFleet === "object" && activeFleet !== null) {
++    online = typeof activeFleet.online === "number" ? Math.max(0, activeFleet.online) : 0;
++    total = typeof activeFleet.total === "number" && activeFleet.total > 0 ? activeFleet.total : 5;
++    display = `${online}/${total} Online`;
++  } else if (typeof activeFleet === "string") {
++    display = activeFleet;
++    const slashMatch = activeFleet.match(/(\d+)\s*\/\s*(\d+)/);
++    if (slashMatch) {
++      online = Math.max(0, parseInt(slashMatch[1], 10));
++      total = parseInt(slashMatch[2], 10);
++      if (isNaN(total) || total <= 0) total = 5;
++      if (isNaN(online)) online = 0;
++    } else {
++      const numMatch = activeFleet.match(/(\d+)/);
++      if (numMatch) {
++        online = Math.max(0, parseInt(numMatch[1], 10));
++        total = 5;
++      } else if (activeFleet.toLowerCase().includes("offline")) {
++        online = 0;
++        total = 5;
++      }
++    }
++  }
++
++  const percentage = total > 0 ? Math.round((online / total) * 100) : 0;
++
++  if (online === 0) {
++    return {
++      display,
++      online,
++      total,
++      percentage: 0,
++      status: "offline",
++      label: "Fleet Offline",
++    };
++  }
++
++  if (online < total) {
++    return {
++      display,
++      online,
++      total,
++      percentage,
++      status: "degraded",
++      label: `${online}/${total} Degraded`,
++    };
++  }
++
++  return {
++    display,
++    online,
++    total,
++    percentage,
++    status: "optimal",
++    label: "100% Operational",
++  };
++}
++
+ export function KpiMetricBar({
+   totalIngestion = 0,
+   ingestionRate = 0,
+   msgPerSec,
+   activeFleet = "5/5 Online",
+   p95LatencyMs = 8.4,
+   unacknowledgedAlarms,
+   unackAlertsCount,
+   className,
+ }: KpiMetricBarProps) {
+-  // Resolve alarms count
+-  const effectiveAlarms = unacknowledgedAlarms ?? unackAlertsCount ?? 0;
++  // Resolve alarms count (clamped to non-negative)
++  const effectiveAlarms = Math.max(0, unacknowledgedAlarms ?? unackAlertsCount ?? 0);
+ 
+-  // Format active fleet string
+-  const fleetDisplay =
+-    typeof activeFleet === "string"
+-      ? activeFleet
+-      : `${activeFleet?.online ?? 5}/${activeFleet?.total ?? 5} Online`;
++  // Parse active fleet dynamically
++  const fleetMetrics = parseActiveFleet(activeFleet);
+ 
+-  // Determine latency SLA styling
+-  const safeLatency = p95LatencyMs > 0 ? p95LatencyMs : 8.4;
++  // Determine latency SLA styling - preserve genuine 0.0 ms without falling back to 8.4 ms
++  const hasLatencyValue = typeof p95LatencyMs === "number" && !isNaN(p95LatencyMs);
++  const safeLatency = hasLatencyValue
++    ? (p95LatencyMs >= 0 ? p95LatencyMs : 8.4)
++    : 8.4;
+   const isLatencyOptimal = safeLatency < 50;
+   const isLatencyAcceptable = safeLatency >= 50 && safeLatency <= 100;
+ 
+-  // Format trend percentage or rate
+-  const effectiveRate = ingestionRate > 0 ? ingestionRate : (msgPerSec && msgPerSec > 0 ? msgPerSec : 0);
++  // Format trend percentage or rate (avoid hardcoded mock "+12.4% / sec" fallback)
++  const effectiveRate =
++    typeof ingestionRate === "number" && ingestionRate > 0
++      ? ingestionRate
++      : typeof msgPerSec === "number" && msgPerSec > 0
++      ? msgPerSec
++      : 0;
+   const rateLabel =
+     effectiveRate > 0
+       ? `+${effectiveRate.toFixed(1)}% / sec`
+-      : "+12.4% / sec";
++      : "+0.0% / sec";
+ 
+   // Total ingestion display with large numbers handling
+   const formattedIngestion =
+@@ -118,21 +190,44 @@ export function KpiMetricBar({
+           <div className="my-1">
+             <div className="flex items-center gap-2">
+               <span className="text-2xl sm:text-3xl font-bold font-mono tracking-tight text-white">
+-                {fleetDisplay}
++                {fleetMetrics.display}
+               </span>
+             </div>
+-            <span className="text-[11px] text-[#667A71] font-mono">5 Edge Nodes Deployed</span>
++            <span className="text-[11px] text-[#667A71] font-mono">
++              {fleetMetrics.total} Edge Nodes Deployed
++            </span>
+           </div>
+ 
+           <div className="mt-2">
+-            <span className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#00F59B]/10 text-[#00F59B] border border-[#00F59B]/20 font-mono shadow-[0_0_8px_rgba(0,245,155,0.15)]">
++            <span
++              className={cn(
++                "inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono border",
++                fleetMetrics.status === "optimal" &&
++                  "bg-[#00F59B]/10 text-[#00F59B] border-[#00F59B]/20 shadow-[0_0_8px_rgba(0,245,155,0.15)]",
++                fleetMetrics.status === "degraded" &&
++                  "bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/20 shadow-[0_0_8px_rgba(245,158,11,0.15)]",
++                fleetMetrics.status === "offline" &&
++                  "bg-[#FF4D4D]/10 text-[#FF4D4D] border-[#FF4D4D]/20 shadow-[0_0_8px_rgba(255,77,77,0.15)]"
++              )}
++            >
+               <span className="relative flex h-2 w-2">
+-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00F59B] opacity-75" />
+-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00F59B]" />
++                <span
++                  className={cn(
++                    "animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
++                    fleetMetrics.status === "optimal" && "bg-[#00F59B]",
++                    fleetMetrics.status === "degraded" && "bg-[#F59E0B]",
++                    fleetMetrics.status === "offline" && "bg-[#FF4D4D]"
++                  )}
++                />
++                <span
++                  className={cn(
++                    "relative inline-flex rounded-full h-2 w-2",
++                    fleetMetrics.status === "optimal" && "bg-[#00F59B]",
++                    fleetMetrics.status === "degraded" && "bg-[#F59E0B]",
++                    fleetMetrics.status === "offline" && "bg-[#FF4D4D]"
++                  )}
++                />
+               </span>
+-              <span>100% Operational</span>
++              <span>{fleetMetrics.label}</span>
+             </span>
+           </div>
+         </div>
+@@ -151,7 +246,7 @@ export function KpiMetricBar({
+ 
+           <div className="my-1">
+             <span className="text-2xl sm:text-3xl font-bold font-mono tracking-tight text-white block">
+-              {safeLatency > 0 ? `${safeLatency.toFixed(1)} ms` : "8.4 ms"}
++              {`${safeLatency.toFixed(1)} ms`}
+             </span>
+             <p className="text-[11px] text-[#667A71] font-mono">Edge Gateway p95</p>
+           </div>

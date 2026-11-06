@@ -4,49 +4,88 @@
 
 @layer base {
   :root {
-    --background: 222 47% 6%;
-    --foreground: 210 40% 98%;
-    --card: 222 47% 9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 47% 9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 199 89% 48%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217 33% 15%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 217 33% 17%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217 33% 18%;
-    --input: 217 33% 18%;
-    --ring: 199 89% 48%;
-    --radius: 0.5rem;
+    --background: 150 22% 4%;            /* #070B09 Deep matte canvas */
+    --foreground: 152 81% 96%;           /* #ECFDF5 Crisp light text */
+
+    --card: 154 21% 6%;                  /* #0D1411 Primary container surface */
+    --card-foreground: 152 81% 96%;      /* #ECFDF5 */
+
+    --popover: 153 21% 8%;               /* #111A16 Elevated popover/card surface */
+    --popover-foreground: 152 81% 96%;   /* #ECFDF5 */
+
+    --primary: 158 100% 48%;             /* #00F59B Solid neon mint */
+    --primary-foreground: 150 38% 3%;    /* #050B08 High-contrast dark pill text */
+
+    --secondary: 153 21% 8%;             /* #111A16 Elevated secondary surface */
+    --secondary-foreground: 152 81% 96%; /* #ECFDF5 */
+
+    --muted: 152 24% 11%;                /* #15221C Nested container surface */
+    --muted-foreground: 147 8% 47%;      /* #6E8277 Sage-grey muted text */
+
+    --accent: 152 24% 11%;               /* #15221C Hover/accent surface */
+    --accent-foreground: 158 100% 48%;   /* #00F59B Neon text on hover */
+
+    --destructive: 0 100% 65%;           /* #FF4D4D Alarm red */
+    --destructive-foreground: 152 81% 96%; /* #ECFDF5 */
+
+    --border: 150 21% 13%;               /* #1A2821 Subtle dark emerald border */
+    --input: 150 21% 13%;                /* #1A2821 Input border */
+    --ring: 158 100% 48%;                /* #00F59B Neon focus ring */
+
+    --radius: 0.875rem;                  /* 14px */
   }
 }
 
 body {
-  background-color: #0b0f17;
-  color: #f3f4f6;
+  background-color: #070B09;
+  color: #ECFDF5;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   overflow-x: hidden;
 }
 
-/* Custom scrollbars for technical SCADA view */
+/* Custom Technical SCADA Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #070B09;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #1A2821;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #1F3328;
 }
 
+@layer utilities {
+  /* SCADA Glow Utilities */
+  .scada-glow {
+    box-shadow: 0 0 12px rgba(0, 245, 155, 0.35);
+  }
+  .scada-glow-lg {
+    box-shadow: 0 0 24px rgba(0, 245, 155, 0.25);
+  }
+  .scada-glow-sm {
+    box-shadow: 0 0 6px rgba(0, 245, 155, 0.40);
+  }
+  .scada-alarm-glow {
+    box-shadow: 0 0 12px rgba(255, 77, 77, 0.40);
+  }
+
+  /* Active Navigation Solid Neon Pill */
+  .scada-pill-active {
+    background-color: #00F59B;
+    color: #050B08;
+    font-weight: 700;
+    box-shadow: 0 0 20px rgba(0, 245, 155, 0.35);
+  }
+
+  /* Alarm Badge Pill */
+  .scada-badge-alarm {
+    background-color: #FF4D4D;
+    color: #FFFFFF;
+    box-shadow: 0 0 8px rgba(255, 77, 77, 0.45);
+  }
+}

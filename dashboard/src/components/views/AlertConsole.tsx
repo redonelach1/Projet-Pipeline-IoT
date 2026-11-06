@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { AnomalyEvent, AlertSeverity } from "@/types/iiot";
-import { ShieldAlert, AlertTriangle, AlertOctagon, CheckCircle2, Download, Search, Check } from "lucide-react";
+import { ShieldAlert, AlertTriangle, AlertOctagon, CheckCircle2, Download, Search, Check, X } from "lucide-react";
 import { cn, formatTimestamp } from "@/lib/utils";
 
 interface AlertConsoleProps {
@@ -33,7 +33,8 @@ export function AlertConsole({ alerts, onAcknowledge }: AlertConsoleProps) {
 
   const handleConfirmAck = () => {
     if (selectedAlertForAck) {
-      onAcknowledge(selectedAlertForAck.event_id, ackNote.trim() || "Acknowledged by shift operator");
+      const cleanNote = ackNote.trim().length > 0 ? ackNote.trim().substring(0, 500) : "Operator acknowledged";
+      onAcknowledge(selectedAlertForAck.event_id, cleanNote);
       setSelectedAlertForAck(null);
       setAckNote("");
     }
@@ -61,13 +62,13 @@ export function AlertConsole({ alerts, onAcknowledge }: AlertConsoleProps) {
   return (
     <div className="space-y-6">
       {/* Console Header */}
-      <div className="bg-industrial-panel border border-industrial-border rounded-lg p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#0D1411] border border-[#1A2821] rounded-2xl p-5 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-base font-bold font-mono uppercase text-white flex items-center space-x-2">
-            <ShieldAlert className="w-5 h-5 text-rose-400" />
-            <span>Industrial Incident & Alarm Management</span>
+            <ShieldAlert className="w-5 h-5 text-[#FF4D4D]" />
+            <span>Industrial Incident &amp; Alarm Management</span>
           </h2>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs font-mono text-[#8E9E96] mt-1">
             Real-time edge event stream with operator acknowledgment workflow
           </p>
         </div>
@@ -75,7 +76,7 @@ export function AlertConsole({ alerts, onAcknowledge }: AlertConsoleProps) {
         <div className="flex items-center space-x-2">
           <button
             onClick={exportAlertsCSV}
-            className="flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-mono bg-industrial-dark border border-industrial-border text-gray-300 hover:text-white transition-colors"
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-mono bg-[#070B09] border border-[#1A2821] text-[#8E9E96] hover:text-white transition-colors"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export CSV</span>
@@ -85,12 +86,14 @@ export function AlertConsole({ alerts, onAcknowledge }: AlertConsoleProps) {
 
       {/* Filter and Search Bar */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-1.5 bg-industrial-panel p-1 rounded-lg border border-industrial-border text-xs font-mono">
+        <div className="flex flex-wrap items-center gap-1.5 bg-[#0D1411] p-1.5 rounded-xl border border-[#1A2821] text-xs font-mono">
           <button
             onClick={() => setFilterSeverity("ALL")}
             className={cn(
-              "px-3 py-1 rounded transition-colors",
-              filterSeverity === "ALL" ? "bg-industrial-dark text-white font-bold" : "text-gray-400 hover:text-white"
+              "px-3 py-1 rounded-lg transition-colors text-[11px]",
+              filterSeverity === "ALL"
+                ? "bg-[#00F59B] text-[#050B08] font-bold shadow-[0_0_10px_rgba(0,245,155,0.25)]"
+                : "text-[#8E9E96] hover:text-white"
             )}
           >
             All Events ({alerts.length})
@@ -98,8 +101,10 @@ export function AlertConsole({ alerts, onAcknowledge }: AlertConsoleProps) {
           <button
             onClick={() => setFilterSeverity("UNACK")}
             className={cn(
-              "px-3 py-1 rounded transition-colors",
-              filterSeverity === "UNACK" ? "bg-rose-500/20 text-rose-400 font-bold" : "text-gray-400 hover:text-white"
+              "px-3 py-1 rounded-lg transition-colors text-[11px]",
+              filterSeverity === "UNACK"
+                ? "bg-[#FF4D4D] text-white font-bold"
+                : "text-[#8E9E96] hover:text-[#FF4D4D]"
             )}
           >
             Unacknowledged ({alerts.filter((a) => !a.acknowledged).length})
@@ -107,8 +112,10 @@ export function AlertConsole({ alerts, onAcknowledge }: AlertConsoleProps) {
           <button
             onClick={() => setFilterSeverity("CRITICAL")}
             className={cn(
-              "px-3 py-1 rounded transition-colors",
-              filterSeverity === "CRITICAL" ? "bg-rose-500/20 text-rose-400 font-bold" : "text-gray-400 hover:text-white"
+              "px-3 py-1 rounded-lg transition-colors text-[11px]",
+              filterSeverity === "CRITICAL"
+                ? "bg-[#FF4D4D] text-white font-bold"
+                : "text-[#8E9E96] hover:text-white"
             )}
           >
             Critical
@@ -116,8 +123,10 @@ export function AlertConsole({ alerts, onAcknowledge }: AlertConsoleProps) {
           <button
             onClick={() => setFilterSeverity("WARNING")}
             className={cn(
-              "px-3 py-1 rounded transition-colors",
-              filterSeverity === "WARNING" ? "bg-amber-500/20 text-amber-400 font-bold" : "text-gray-400 hover:text-white"
+              "px-3 py-1 rounded-lg transition-colors text-[11px]",
+              filterSeverity === "WARNING"
+                ? "bg-[#F59E0B] text-black font-bold"
+                : "text-[#8E9E96] hover:text-white"
             )}
           >
             Warnings
@@ -126,37 +135,37 @@ export function AlertConsole({ alerts, onAcknowledge }: AlertConsoleProps) {
 
         {/* Search input */}
         <div className="relative w-full sm:w-64">
-          <Search className="w-3.5 h-3.5 text-gray-500 absolute left-3 top-2.5" />
+          <Search className="w-3.5 h-3.5 text-[#5C7268] absolute left-3 top-2.5" />
           <input
             type="text"
             placeholder="Search device, reason..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-industrial-panel border border-industrial-border rounded-lg pl-8 pr-3 py-1.5 text-xs font-mono text-white placeholder-gray-500 focus:outline-none focus:border-industrial-cyan"
+            className="w-full bg-[#0D1411] border border-[#1A2821] rounded-xl pl-8 pr-3 py-1.5 text-xs font-mono text-white placeholder-[#5C7268] focus:outline-none focus:border-[#00F59B]"
           />
         </div>
       </div>
 
       {/* Alarms Table */}
-      <div className="bg-industrial-panel border border-industrial-border rounded-lg overflow-hidden">
+      <div className="bg-[#0D1411] border border-[#1A2821] rounded-2xl overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-industrial-dark text-gray-400 uppercase text-[11px] border-b border-industrial-border">
+            <thead className="bg-[#070B09] text-[#8E9E96] uppercase text-[11px] border-b border-[#1A2821]">
               <tr>
                 <th className="px-4 py-3">Event ID</th>
                 <th className="px-4 py-3">Timestamp</th>
-                <th className="px-4 py-3">Asset</th>
+                <th className="px-4 py-3">Asset (device_id)</th>
                 <th className="px-4 py-3">Severity</th>
-                <th className="px-4 py-3">Variable</th>
+                <th className="px-4 py-3">Variable / Rule</th>
                 <th className="px-4 py-3">Value / Threshold</th>
                 <th className="px-4 py-3">Diagnostic Reason</th>
                 <th className="px-4 py-3">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-industrial-border/60">
+            <tbody className="divide-y divide-[#1A2821]/60">
               {filteredAlerts.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-4 py-8 text-center text-gray-500">
+                  <td colSpan={8} className="px-4 py-8 text-center text-[#5C7268]">
                     No active alarm matching the selected filter criteria.
                   </td>
                 </tr>
@@ -165,20 +174,20 @@ export function AlertConsole({ alerts, onAcknowledge }: AlertConsoleProps) {
                   <tr
                     key={alert.event_id}
                     className={cn(
-                      "hover:bg-industrial-dark/50 transition-colors",
-                      !alert.acknowledged && alert.severity === "CRITICAL" ? "bg-rose-950/20" : ""
+                      "hover:bg-[#131C18] transition-colors",
+                      !alert.acknowledged && alert.severity === "CRITICAL" ? "bg-[#FF4D4D]/10" : ""
                     )}
                   >
                     <td className="px-4 py-3 font-bold text-gray-300">{alert.event_id}</td>
-                    <td className="px-4 py-3 text-gray-400">{formatTimestamp(alert.timestamp)}</td>
+                    <td className="px-4 py-3 text-[#8E9E96]">{formatTimestamp(alert.timestamp)}</td>
                     <td className="px-4 py-3 font-semibold text-white">{alert.device_id}</td>
                     <td className="px-4 py-3">
                       <span
                         className={cn(
-                          "px-2 py-0.5 rounded text-[10px] font-bold border",
+                          "px-2 py-0.5 rounded-full text-[10px] font-bold border",
                           alert.severity === "CRITICAL"
-                            ? "bg-rose-500/20 text-rose-400 border-rose-500/30"
-                            : "bg-amber-500/20 text-amber-400 border-amber-500/30"
+                            ? "bg-[#FF4D4D]/15 text-[#FF4D4D] border-[#FF4D4D]/30"
+                            : "bg-[#F59E0B]/15 text-[#F59E0B] border-[#F59E0B]/30"
                         )}
                       >
                         {alert.severity}
@@ -186,22 +195,22 @@ export function AlertConsole({ alerts, onAcknowledge }: AlertConsoleProps) {
                     </td>
                     <td className="px-4 py-3 text-gray-300">{alert.variable}</td>
                     <td className="px-4 py-3 font-semibold">
-                      <span className={alert.severity === "CRITICAL" ? "text-rose-400" : "text-amber-400"}>
+                      <span className={alert.severity === "CRITICAL" ? "text-[#FF4D4D]" : "text-[#F59E0B]"}>
                         {alert.observed_value}
                       </span>
-                      <span className="text-gray-500 text-[10px]"> (Limit: {alert.threshold})</span>
+                      <span className="text-[#5C7268] text-[10px]"> (Limit: {alert.threshold})</span>
                     </td>
-                    <td className="px-4 py-3 text-gray-300 max-w-xs truncate">{alert.reason}</td>
+                    <td className="px-4 py-3 text-[#8E9E96] max-w-xs truncate">{alert.reason}</td>
                     <td className="px-4 py-3">
                       {alert.acknowledged ? (
-                        <div className="flex items-center space-x-1 text-emerald-400 text-[11px]">
+                        <div className="flex items-center space-x-1 text-[#00F59B] text-[11px] font-semibold">
                           <CheckCircle2 className="w-3.5 h-3.5" />
                           <span>ACK</span>
                         </div>
                       ) : (
                         <button
                           onClick={() => setSelectedAlertForAck(alert)}
-                          className="px-2.5 py-1 bg-industrial-dark border border-industrial-border text-xs rounded text-industrial-cyan hover:text-white hover:border-industrial-cyan transition-colors"
+                          className="px-2.5 py-1 bg-[#16231D] border border-[#1A2821] text-xs rounded-xl text-[#00F59B] hover:text-[#050B08] hover:bg-[#00F59B] transition-colors font-semibold"
                         >
                           Acknowledge
                         </button>
@@ -217,50 +226,63 @@ export function AlertConsole({ alerts, onAcknowledge }: AlertConsoleProps) {
 
       {/* Acknowledgment Modal Dialog */}
       {selectedAlertForAck && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-industrial-panel border border-industrial-border rounded-lg max-w-md w-full p-5 space-y-4 shadow-xl">
-            <div className="flex items-center justify-between border-b border-industrial-border pb-3">
-              <h3 className="font-mono font-bold text-white text-sm">Operator Alarm Acknowledgment</h3>
-              <span className="text-xs font-mono text-gray-400">{selectedAlertForAck.event_id}</span>
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in"
+        >
+          <div className="bg-[#0D1411] border border-[#1A2821] rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
+            <div className="flex items-center justify-between border-b border-[#1A2821] pb-3">
+              <h3 className="font-mono font-bold text-white text-sm">Operator Alarm Acknowledgment (ACK)</h3>
+              <button
+                type="button"
+                onClick={() => setSelectedAlertForAck(null)}
+                className="text-[#8E9E96] hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
 
-            <div className="text-xs font-mono space-y-2 bg-industrial-dark p-3 rounded border border-industrial-border/60">
+            <div className="text-xs font-mono space-y-2 bg-[#070B09] p-3 rounded-xl border border-[#1A2821]">
               <div className="flex justify-between">
-                <span className="text-gray-400">Target Asset:</span>
+                <span className="text-[#8E9E96]">Target Asset:</span>
                 <span className="text-white font-bold">{selectedAlertForAck.device_id}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-400">Alert Variable:</span>
-                <span className="text-white">{selectedAlertForAck.variable}</span>
+                <span className="text-[#8E9E96]">Alert Variable / Rule:</span>
+                <span className="text-[#00F59B]">{selectedAlertForAck.variable}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-400">Observed Value:</span>
-                <span className="text-rose-400 font-bold">{selectedAlertForAck.observed_value}</span>
+                <span className="text-[#8E9E96]">Observed Value vs Limit:</span>
+                <span className="text-[#FF4D4D] font-bold">
+                  {selectedAlertForAck.observed_value} (Threshold: {selectedAlertForAck.threshold})
+                </span>
               </div>
-              <p className="text-gray-300 pt-1 text-[11px]">{selectedAlertForAck.reason}</p>
+              <p className="text-[#8E9E96] pt-1 text-[11px]">{selectedAlertForAck.reason}</p>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-mono text-gray-400">Operator Maintenance Note:</label>
+              <label className="text-xs font-mono text-[#8E9E96]">Operator Maintenance Note:</label>
               <textarea
                 value={ackNote}
+                maxLength={500}
                 onChange={(e) => setAckNote(e.target.value)}
                 placeholder="Enter corrective action or shift observation (e.g. Technician notified, speed reduced)..."
                 rows={3}
-                className="w-full bg-industrial-dark border border-industrial-border rounded p-2 text-xs font-mono text-white placeholder-gray-500 focus:outline-none focus:border-industrial-cyan"
+                className="w-full bg-[#070B09] border border-[#1A2821] rounded-xl p-2.5 text-xs font-mono text-white placeholder-[#5C7268] focus:outline-none focus:border-[#00F59B]"
               />
             </div>
 
-            <div className="flex justify-end space-x-2 pt-2 border-t border-industrial-border">
+            <div className="flex justify-end space-x-2 pt-2 border-t border-[#1A2821]">
               <button
                 onClick={() => setSelectedAlertForAck(null)}
-                className="px-3 py-1.5 rounded text-xs font-mono text-gray-400 hover:text-white transition-colors"
+                className="px-3 py-1.5 rounded-xl text-xs font-mono text-[#8E9E96] hover:text-white transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmAck}
-                className="px-4 py-1.5 rounded text-xs font-mono bg-industrial-cyan text-black font-bold hover:bg-cyan-300 transition-colors flex items-center space-x-1"
+                className="px-4 py-1.5 rounded-xl text-xs font-mono bg-[#00F59B] text-[#050B08] font-bold hover:bg-[#00F59B]/90 shadow-[0_0_12px_rgba(0,245,155,0.35)] transition-colors flex items-center space-x-1"
               >
                 <Check className="w-3.5 h-3.5" />
                 <span>Confirm Acknowledgment</span>
@@ -273,3 +295,4 @@ export function AlertConsole({ alerts, onAcknowledge }: AlertConsoleProps) {
   );
 }
 
+export default AlertConsole;

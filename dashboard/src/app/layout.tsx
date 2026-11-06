@@ -13,10 +13,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="min-h-screen bg-industrial-dark text-gray-100 antialiased selection:bg-industrial-cyan selection:text-black">
+      <body className="min-h-screen bg-scada-bg text-scada-text antialiased selection:bg-scada-neon selection:text-scada-pill-text">
         {children}
       </body>
     </html>
   );
 }
-
