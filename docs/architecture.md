@@ -90,3 +90,4 @@ L'architecture du projet concrétise le paradigme de l'**Industrie 4.0** en éta
 | **Découverte automatique** | Non native (définie par convention) | Native via *Address Space* | Native via messages `NBIRTH` / `DBIRTH` |
 | **Adéquation Web / Cloud** | Excellente (support WebSockets direct) | Moyenne (nécessite passerelle REST/WS) | Excellente sur broker centralisé |
 | **Justification du choix** | Idéal pour le prototype IIoT : légèreté, streaming Web sub-100ms et déploiement conteneurisé simple. | Pertinent en extension pour l'interfaçage avec des automates Siemens ou Schneider existants. | Piste future pour standardiser l'état des nœuds et le cycle de vie industriel. |
+

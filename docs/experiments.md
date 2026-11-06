@@ -77,3 +77,4 @@ Les expérimentations démontrent que l'architecture distribuée proposée rempl
 1. **Haute performance** : Débit supérieur à 90 msg/s avec une latence p95 de 53.71 ms.
 2. **Tolérance aux pannes certifiée** : Continuité de service prouvée par le buffer *Store-and-Forward*.
 3. **Ergonomie opérationnelle** : Déclenchement et visualisation des pannes en moins de 100 ms sur le tableau de bord SCADA Next.js.
+
