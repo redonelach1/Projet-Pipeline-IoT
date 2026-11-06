@@ -1,8 +1,4 @@
 # Pipeline IIoT End-to-End & Poste de Conduite SCADA Temps Réel
-### Master & Ingénierie Industrie 4.0 — ENSAM Rabat (2026–2027)
-**Projet Académique & Industriel de Fin d'Études**  
-**Encadrement : Professeure Maria ZEMZAMI**
-
 ---
 
 [![Status](https://img.shields.io/badge/Status-Production--Ready-00F59B?style=flat-square&logo=git)](https://github.com)
