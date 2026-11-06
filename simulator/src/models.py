@@ -1,8 +1,10 @@
 """Data models and telemetry schemas for the industrial simulator."""
 
+import sys
+from pathlib import Path
 from enum import Enum
 from typing import Dict, Any, Optional
-from datetime import datetime, timezone
+from datetime import datetime
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -73,4 +75,3 @@ class SimulationCommand(BaseModel):
     duration_sec: Optional[int] = Field(30, description="Duration in seconds for transient faults")
     frequency_hz: Optional[float] = Field(None, description="Emission frequency override")
     parameters: Optional[Dict[str, Any]] = Field(default_factory=dict)
-

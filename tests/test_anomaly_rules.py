@@ -1,7 +1,7 @@
 """Unit tests for the Edge Gateway anomaly detection rule engine and window aggregation."""
 
 import pytest
-from edge.src.models import NormalizedTelemetry, Measurements, MachineState, DataQuality, AlertSeverity
+from edge.src.edge_models import NormalizedTelemetry, Measurements, MachineState, DataQuality, AlertSeverity
 from edge.src.anomaly_rules import AnomalyRuleEngine
 from edge.src.aggregation import WindowAggregator
 

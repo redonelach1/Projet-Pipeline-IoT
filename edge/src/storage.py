@@ -1,13 +1,20 @@
 """Time-series persistence with InfluxDB and local SQLite store-and-forward resilience buffer."""
 
+import sys
 import time
 import sqlite3
 import logging
+from pathlib import Path
 from typing import Optional, List
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 
-from .models import NormalizedTelemetry, WindowAggregate, AnomalyEvent
+# Ensure local module directory is in sys.path
+_current_dir = str(Path(__file__).resolve().parent)
+if _current_dir not in sys.path:
+    sys.path.insert(0, _current_dir)
+
+from edge_models import NormalizedTelemetry, WindowAggregate, AnomalyEvent
 
 logger = logging.getLogger("EdgeStorage")
 
@@ -36,6 +43,9 @@ class StorageManager:
         self.write_api = None
         self.is_connected = False
         self._connect_influx()
+
+    def _init_sqlite() -> None:
+        pass
 
     def _init_sqlite(self) -> None:
         try:
@@ -174,4 +184,3 @@ class StorageManager:
         else:
             self._flush_sqlite_buffer()
         return self.is_connected
-

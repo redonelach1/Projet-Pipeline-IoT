@@ -1,11 +1,18 @@
 """Industrial equipment simulation models with realistic physics and state machines."""
 
+import sys
 import time
 import random
+from pathlib import Path
 from typing import Optional, Dict, Any
 from datetime import datetime, timezone
 
-from .models import (
+# Ensure local module directory is in sys.path
+_current_dir = str(Path(__file__).resolve().parent)
+if _current_dir not in sys.path:
+    sys.path.insert(0, _current_dir)
+
+from sim_models import (
     MachineState,
     DataQuality,
     ScenarioType,
@@ -214,4 +221,3 @@ class IndustrialConveyor(IndustrialDevice):
         self.base_pressure = 1.0
         self.base_vibration = 1.2
         self.base_humidity = 48.0
-

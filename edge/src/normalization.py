@@ -1,8 +1,16 @@
 """Normalization and edge metadata enrichment module."""
 
+import sys
+from pathlib import Path
 from datetime import datetime, timezone
 from typing import Tuple
-from .models import IngestedTelemetry, NormalizedTelemetry
+
+# Ensure local module directory is in sys.path
+_current_dir = str(Path(__file__).resolve().parent)
+if _current_dir not in sys.path:
+    sys.path.insert(0, _current_dir)
+
+from edge_models import IngestedTelemetry, NormalizedTelemetry
 
 
 class Normalizer:
@@ -36,4 +44,3 @@ class Normalizer:
             processing_latency_ms=latency_ms,
             validation_status="VALID",
         )
-

@@ -1,11 +1,18 @@
 """Time-window aggregation engine for reducing time-series storage footprint."""
 
+import sys
 import math
 import logging
+from pathlib import Path
 from typing import Dict, List, Optional
 from datetime import datetime, timezone
 
-from .models import NormalizedTelemetry, WindowAggregate, MetricSummary
+# Ensure local module directory is in sys.path
+_current_dir = str(Path(__file__).resolve().parent)
+if _current_dir not in sys.path:
+    sys.path.insert(0, _current_dir)
+
+from edge_models import NormalizedTelemetry, WindowAggregate, MetricSummary
 
 logger = logging.getLogger("EdgeAggregation")
 
@@ -84,4 +91,3 @@ class WindowAggregator:
             return agg
 
         return None
-

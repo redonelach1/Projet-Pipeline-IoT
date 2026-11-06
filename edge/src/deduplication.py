@@ -1,8 +1,15 @@
 """Idempotent deduplication engine for MQTT QoS 1 duplicate mitigation."""
 
+import sys
 import logging
+from pathlib import Path
 from collections import OrderedDict
 from typing import Tuple, Dict, Any
+
+# Ensure local module directory is in sys.path
+_current_dir = str(Path(__file__).resolve().parent)
+if _current_dir not in sys.path:
+    sys.path.insert(0, _current_dir)
 
 logger = logging.getLogger("EdgeDeduplication")
 
@@ -40,4 +47,3 @@ class DeduplicationEngine:
                 round((self.duplicate_count / total) * 100, 2) if total > 0 else 0.0
             ),
         }
-

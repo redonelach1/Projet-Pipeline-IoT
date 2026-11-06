@@ -6,17 +6,23 @@ import time
 import json
 import signal
 import logging
+from pathlib import Path
 from typing import Optional
 from dotenv import load_dotenv
 import paho.mqtt.client as mqtt
 
-from .validation import PayloadValidator
-from .deduplication import DeduplicationEngine
-from .normalization import Normalizer
-from .aggregation import WindowAggregator
-from .anomaly_rules import AnomalyRuleEngine
-from .storage import StorageManager
-from .models import AnomalyEvent
+# Ensure local module directory is in sys.path
+_current_dir = str(Path(__file__).resolve().parent)
+if _current_dir not in sys.path:
+    sys.path.insert(0, _current_dir)
+
+from validation import PayloadValidator
+from deduplication import DeduplicationEngine
+from normalization import Normalizer
+from aggregation import WindowAggregator
+from anomaly_rules import AnomalyRuleEngine
+from storage import StorageManager
+from edge_models import AnomalyEvent
 
 # Setup structured logging
 logging.basicConfig(
@@ -216,4 +222,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

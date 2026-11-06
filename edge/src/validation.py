@@ -1,11 +1,18 @@
 """Payload schema and physical bounds validation module."""
 
+import sys
 import json
 import logging
+from pathlib import Path
 from typing import Tuple, Optional, Dict, Any
 from pydantic import ValidationError
 
-from .models import IngestedTelemetry
+# Ensure local module directory is in sys.path
+_current_dir = str(Path(__file__).resolve().parent)
+if _current_dir not in sys.path:
+    sys.path.insert(0, _current_dir)
+
+from edge_models import IngestedTelemetry
 
 logger = logging.getLogger("EdgeValidation")
 
@@ -69,4 +76,3 @@ class PayloadValidator:
                 else 0.0
             ),
         }
-

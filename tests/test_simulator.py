@@ -7,7 +7,7 @@ from simulator.src.devices import (
     AirCompressor,
     IndustrialConveyor,
 )
-from simulator.src.models import ScenarioType, MachineState
+from simulator.src.sim_models import ScenarioType, MachineState
 
 
 def test_device_initialization_and_reproducibility():

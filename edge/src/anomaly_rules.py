@@ -1,11 +1,18 @@
 """Deterministic and explainable edge anomaly detection rule engine."""
 
+import sys
 import uuid
 import logging
+from pathlib import Path
 from typing import List
 from datetime import datetime, timezone
 
-from .models import NormalizedTelemetry, AnomalyEvent, AlertSeverity
+# Ensure local module directory is in sys.path
+_current_dir = str(Path(__file__).resolve().parent)
+if _current_dir not in sys.path:
+    sys.path.insert(0, _current_dir)
+
+from edge_models import NormalizedTelemetry, AnomalyEvent, AlertSeverity
 
 logger = logging.getLogger("EdgeAnomalyEngine")
 
@@ -131,4 +138,3 @@ class AnomalyRuleEngine:
             logger.info("Anomaly detection rule triggered %d event(s) for %s", len(events), dev_id)
 
         return events
-

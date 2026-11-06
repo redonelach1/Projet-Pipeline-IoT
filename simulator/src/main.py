@@ -5,17 +5,23 @@ import sys
 import time
 import signal
 import logging
+from pathlib import Path
 from typing import Dict
 from dotenv import load_dotenv
 
-from .devices import (
+# Ensure local module directory is in sys.path
+_current_dir = str(Path(__file__).resolve().parent)
+if _current_dir not in sys.path:
+    sys.path.insert(0, _current_dir)
+
+from devices import (
     IndustrialDevice,
     ElectricMotor,
     CentrifugalPump,
     AirCompressor,
     IndustrialConveyor,
 )
-from .mqtt_publisher import SimulatorMQTTClient
+from mqtt_publisher import SimulatorMQTTClient
 
 # Setup structured logging
 logging.basicConfig(
@@ -95,4 +101,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

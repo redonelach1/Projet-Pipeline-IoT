@@ -1,12 +1,19 @@
 """MQTT publisher and command subscriber for the industrial simulator."""
 
+import sys
 import json
 import logging
+from pathlib import Path
 from typing import Dict, List, Optional, Callable
 import paho.mqtt.client as mqtt
 
-from .models import SimulationCommand, ScenarioType
-from .devices import IndustrialDevice
+# Ensure local module directory is in sys.path
+_current_dir = str(Path(__file__).resolve().parent)
+if _current_dir not in sys.path:
+    sys.path.insert(0, _current_dir)
+
+from sim_models import SimulationCommand, ScenarioType
+from devices import IndustrialDevice
 
 logger = logging.getLogger("SimulatorMQTT")
 
@@ -140,4 +147,3 @@ class SimulatorMQTTClient:
             "active_scenario": device.active_scenario.value,
         }
         self.client.publish(topic, payload=json.dumps(payload), qos=1, retain=True)
-
