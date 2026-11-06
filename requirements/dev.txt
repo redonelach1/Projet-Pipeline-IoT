@@ -1,0 +1,7 @@
+-r simulator.txt
+-r edge.txt
+pytest>=8.2.0
+pytest-asyncio>=0.23.6
+ruff>=0.4.4
+requests>=2.31.0
+

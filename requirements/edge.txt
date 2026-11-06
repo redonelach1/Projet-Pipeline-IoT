@@ -1,0 +1,4 @@
+-r common.txt
+influxdb-client>=1.42.0
+aiosqlite>=0.20.0
+

@@ -1,0 +1,143 @@
+services:
+  # ----------------------------------------------------------------------------
+  # 1. Industrial MQTT Message Broker (TCP 1883 + WebSockets 9001)
+  # ----------------------------------------------------------------------------
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: ensam_iiot_mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./infrastructure/mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+    healthcheck:
+      test: ["CMD-SHELL", "mosquitto_sub -h localhost -p 1883 -t '$$SYS/#' -C 1 > /dev/null 2>&1 || exit 0"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 2s
+    networks:
+      - iiot_network
+
+  # ----------------------------------------------------------------------------
+  # 2. Time-Series Persistence Engine (InfluxDB v2.7)
+  # ----------------------------------------------------------------------------
+  influxdb:
+    image: influxdb:2.7-alpine
+    container_name: ensam_iiot_influxdb
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_ADMIN_USER:-ensam_admin}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_ADMIN_PASSWORD:-ensam_industrie40_password}
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG:-ensam}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET:-iiot_telemetry}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_ADMIN_TOKEN:-ensam_iiot_super_secret_auth_token_2026_2027}
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:8086/health || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    networks:
+      - iiot_network
+
+  # ----------------------------------------------------------------------------
+  # 3. Python Industrial Multi-Equipment Simulator
+  # ----------------------------------------------------------------------------
+  simulator:
+    build:
+      context: .
+      dockerfile: simulator/Dockerfile
+    container_name: ensam_iiot_simulator
+    restart: unless-stopped
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+    environment:
+      - MQTT_BROKER_HOST=mosquitto
+      - MQTT_BROKER_PORT=1883
+      - MQTT_CLIENT_ID_SIMULATOR=ensam_sim_producer
+      - MQTT_TOPIC_PREFIX=ensam/iiot
+      - SIMULATOR_FREQUENCY_HZ=${SIMULATOR_FREQUENCY_HZ:-1.0}
+      - SIMULATOR_RANDOM_SEED=${SIMULATOR_RANDOM_SEED:-42}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    networks:
+      - iiot_network
+
+  # ----------------------------------------------------------------------------
+  # 4. Python Edge Processing & Anomaly Detection Gateway
+  # ----------------------------------------------------------------------------
+  edge-gateway:
+    build:
+      context: .
+      dockerfile: edge/Dockerfile
+    container_name: ensam_iiot_edge
+    restart: unless-stopped
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+      influxdb:
+        condition: service_healthy
+    environment:
+      - MQTT_BROKER_HOST=mosquitto
+      - MQTT_BROKER_PORT=1883
+      - MQTT_CLIENT_ID_EDGE=ensam_edge_consumer
+      - MQTT_TOPIC_PREFIX=ensam/iiot
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_ORG=${INFLUXDB_ORG:-ensam}
+      - INFLUXDB_BUCKET=${INFLUXDB_BUCKET:-iiot_telemetry}
+      - INFLUXDB_BUCKET_AGGREGATES=${INFLUXDB_BUCKET_AGGREGATES:-iiot_aggregates}
+      - INFLUXDB_ADMIN_TOKEN=${INFLUXDB_ADMIN_TOKEN:-ensam_iiot_super_secret_auth_token_2026_2027}
+      - EDGE_WINDOW_SIZE_SEC=${EDGE_WINDOW_SIZE_SEC:-10}
+      - EDGE_BUFFER_PATH=/app/data/edge_buffer.db
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - edge_data:/app/data
+    networks:
+      - iiot_network
+
+  # ----------------------------------------------------------------------------
+  # 5. Modern SCADA Web Dashboard (Next.js 14/15 + shadcn/ui)
+  # ----------------------------------------------------------------------------
+  dashboard:
+    build:
+      context: .
+      dockerfile: dashboard/Dockerfile
+    container_name: ensam_iiot_dashboard
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+    environment:
+      - NEXT_PUBLIC_MQTT_WS_URL=ws://localhost:9001
+      - NEXT_PUBLIC_INFLUXDB_URL=http://localhost:8086
+      - NEXT_PUBLIC_INFLUXDB_ORG=${INFLUXDB_ORG:-ensam}
+      - NEXT_PUBLIC_INFLUXDB_BUCKET=${INFLUXDB_BUCKET:-iiot_telemetry}
+      - NEXT_PUBLIC_INFLUXDB_TOKEN=${INFLUXDB_ADMIN_TOKEN:-ensam_iiot_super_secret_auth_token_2026_2027}
+    networks:
+      - iiot_network
+
+# ------------------------------------------------------------------------------
+# Persistent Storage Volumes & Dedicated Virtual Network
+# ------------------------------------------------------------------------------
+volumes:
+  mosquitto_data:
+  mosquitto_log:
+  influxdb_data:
+  edge_data:
+
+networks:
+  iiot_network:
+    name: ensam_iiot_network
+    driver: bridge
+
