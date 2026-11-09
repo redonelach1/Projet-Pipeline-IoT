@@ -460,6 +460,7 @@ cd dashboard && node scripts/run_e2e_tests.mjs
 ```text
 .
 ├── docs/                               # Dossier documentaire d'ingénierie
+│   ├── guide_soutenance.md             # Guide exhaustif de soutenance orale & FAQ jury
 │   ├── architecture.md                 # Document d'architecture système détaillée
 │   ├── data_model.md                   # Spécification formelle du modèle de données & topics ISA-95
 │   ├── security.md                     # Analyse cybersécurité OT conforme NIST SP 800-82 Rev. 3
@@ -513,7 +514,8 @@ cd dashboard && node scripts/run_e2e_tests.mjs
 
 ## 14. Dossier Documentaire d'Ingénierie
 
-Pour approfondir les détails de conception et les analyses spécialisées, consulter les documents de référence :
+Pour approfondir les détails de conception, la préparation à l'épreuve orale et les analyses spécialisées, consulter les documents de référence :
+- [Guide de Préparation à la Soutenance Orale](docs/guide_soutenance.md) : Déroulé chronométré (10 min), pitch d'ouverture, justification détaillée composant par composant et FAQ de 12 questions pièges du jury.
 - [Document d'Architecture Système](docs/architecture.md) : Diagrammes de flux, modélisation détaillée et comparatif MQTT / OPC UA / Sparkplug B.
 - [Modèle de Données & Schémas JSON](docs/data_model.md) : Arborescence ISA-95 des topics MQTT, validation Pydantic v2 et calibrage physique nominal.
 - [Rapport de Cybersécurité OT](docs/security.md) : Modélisation des menaces et conformité aux directives NIST SP 800-82 Rev. 3.
