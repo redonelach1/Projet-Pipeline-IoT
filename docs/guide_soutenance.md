@@ -544,3 +544,4 @@ docker exec ensam_iiot_mosquitto mosquitto_pub -t "ensam/iiot/site-a/line-1/moto
 > [!TIP]
 > **Conseil d'Éloquence pour la Soutenance** :  
 > Parlez avec assurance, articulez calmement et adoptez un ton d'ingénieur en chef. Quand vous manipulez le dashboard devant le jury, annoncez toujours l'action avant de cliquer (*« Je clique à présent sur Injection Thermique, observez la courbe... »*), puis expliquez immédiatement la mécanique sous-jacente (*« La passerelle a détecté le dépassement en 2 ms et a émis une alerte MQTT... »*). Vous démontrerez ainsi la maîtrise totale de votre système.
+
